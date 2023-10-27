@@ -1,7 +1,7 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-# Editor-based HTTP Client requests
+# Editor-based HTTP src.Client requests
 /httpRequests/
 # Datasource local storage ignored files
 /dataSources/
@@ -86,7 +86,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# Editor-based Rest Client
+# Editor-based Rest src.Client
 .idea/httpRequests
 
 # Android studio 3.1+ serialized cache file
