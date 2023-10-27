@@ -9,7 +9,7 @@ class Client {
         Socket MyClient;
         BufferedInputStream input;
         BufferedOutputStream output;
-        int[][] board = new int[8][8];
+        int[][] board = new int[13][13];
 
         try {
             MyClient = new Socket("localhost", 8888);
@@ -37,7 +37,7 @@ class Client {
                     for(int i=0; i<boardValues.length;i++){
                         board[x][y] = Integer.parseInt(boardValues[i]);
                         x++;
-                        if(x == 8){
+                        if(x == 13){
                             x = 0;
                             y++;
                         }
@@ -65,7 +65,7 @@ class Client {
                     for(int i=0; i<boardValues.length;i++){
                         board[x][y] = Integer.parseInt(boardValues[i]);
                         x++;
-                        if(x == 8){
+                        if(x == 13){
                             x = 0;
                             y++;
                         }
