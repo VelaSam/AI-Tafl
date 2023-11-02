@@ -42,7 +42,7 @@ class Client {
                         }
                     }
 
-                    System.out.println("Nouvelle partie! Vous jouer blanc, entrez votre premier coup : ");
+                    System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
                     String move = null;
                     move = console.readLine();
                     output.write(move.getBytes(),0,move.length());
@@ -50,7 +50,7 @@ class Client {
                 }
                 // Debut de la partie en joueur Noir
                 if(cmd == '2'){
-                    System.out.println("Nouvelle partie! Vous jouer noir, attendez le coup des blancs");
+                    System.out.println("Nouvelle partie! Vous jouer noir, attendez le coup des rouge");
                     byte[] aBuffer = new byte[1024];
 
                     int size = input.available();
