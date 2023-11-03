@@ -5,10 +5,23 @@ public class Tile {
     private TileState state;
     private boolean isX;
 
-    public Tile(/*Position()*/){
-        //TODO
-        //if position == X (un des 4 coins ou le centre)
-        //isX = true;
+    Position position;
+
+    public Tile(Position position){
+        if(position.getI() == 12 || position.getI() == 0){
+            if(position.getJ() == 0){
+                isX = true;
+            }
+            if(position.getJ() == 12){
+                isX = true;
+            }
+        } else if(position.getI() == 6 && position.getJ() == 6){
+            isX = true;
+        } else {
+            isX = false;
+        }
+
+
     }
 
 }

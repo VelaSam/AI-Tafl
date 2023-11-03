@@ -1,26 +1,34 @@
 package modele.plan_de_jeu;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Board {
 
     private int[][] tiles;
 
-    private static Map<Integer, String> letters;
+    private Map<Integer, String> letters;
     {
         letters = new HashMap<>();
-        letter.put(1, "A");
-        letter.put(2, "B");
-        letter.put(3, "C");
-        letter.put(4, "D");
-        letter.put(5, "E");
-        letter.put(6, "F");
-        letter.put(7, "G");
-        letter.put(8, "H");
-        letter.put(9, "I");
-        letter.put(10, "J");
-        letter.put(11, "K");
-        letter.put(12, "L");
-        letter.put(13, "M");
+        letters.put(1, "A");
+        letters.put(2, "B");
+        letters.put(3, "C");
+        letters.put(4, "D");
+        letters.put(5, "E");
+        letters.put(6, "F");
+        letters.put(7, "G");
+        letters.put(8, "H");
+        letters.put(9, "I");
+        letters.put(10, "J");
+        letters.put(11, "K");
+        letters.put(12, "L");
+        letters.put(13, "M");
     }
 
-    public static String getLetterValue(Integer key) { return this.letters.get(key); }
+
+    public Map<Integer, String> getLetters() {
+        return letters;
+    }
+
+    public String getLetterValue(Integer key) { return this.letters.get(key); }
 }
