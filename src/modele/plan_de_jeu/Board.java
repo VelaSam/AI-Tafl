@@ -10,11 +10,11 @@ public class Board {
     }
 
     public void initializeNewBoard(String[] boardValues) {
-        int x=0,y=0;
-        for(int i=0; i<boardValues.length;i++){
+        int x = 0, y = 0;
+        for (int i = 0; i < boardValues.length; i++) {
             tiles[i] = new Tile(new Position(x, y), Integer.parseInt(boardValues[i]));
             x++;
-            if(x == WIDTH){
+            if (x == WIDTH) {
                 x = 0;
                 y++;
             }

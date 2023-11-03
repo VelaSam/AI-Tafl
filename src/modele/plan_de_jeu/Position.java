@@ -8,7 +8,7 @@ public class Position {
     private final String boardPosition;
 
 
-    public Position(int i, int j){
+    public Position(int i, int j) {
         this.i = i;
         this.j = j;
         this.boardPosition = Helpers.getLetterValue(j) + this.i;

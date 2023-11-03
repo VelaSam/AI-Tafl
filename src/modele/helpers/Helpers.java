@@ -25,5 +25,5 @@ public class Helpers {
 
     public static String getLetterValue(Integer key) {
         return letters.get(key);
-    }   
+    }
 }
