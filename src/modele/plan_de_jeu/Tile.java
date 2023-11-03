@@ -6,10 +6,11 @@ public class Tile {
     private final boolean isX;
     Position position;
 
-    public Tile(Position position){
+    public Tile(Position position, int tileState){
+        this.position = position;
+        this.state = TileState.getTileState(tileState);
 
         isX = isXTile(position);
-
     }
 
     private boolean isXTile(Position position){

@@ -19,4 +19,11 @@ public enum TileState {
     public boolean isEmpty(){
         return this == EMPTY;
     }
+
+    public static TileState getTileState(int tileStateValue) {
+        for (TileState t : TileState.values()) {
+            if (t.value == tileStateValue) return t;
+        }
+        throw new IllegalArgumentException("TileState not found.");
+    }
 }

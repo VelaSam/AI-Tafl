@@ -1,3 +1,5 @@
+import modele.plan_de_jeu.Board;
+
 import java.io.*;
 import java.net.*;
 
@@ -8,7 +10,7 @@ class Client {
         Socket MyClient;
         BufferedInputStream input;
         BufferedOutputStream output;
-        int[][] board = new int[13][13];
+        Board board = null; // Board vide.
 
         try {
             MyClient = new Socket("localhost", 8888);
@@ -32,15 +34,7 @@ class Client {
                     System.out.println(s);
                     String[] boardValues;
                     boardValues = s.split(" ");
-                    int x=0,y=0;
-                    for(int i=0; i<boardValues.length;i++){
-                        board[x][y] = Integer.parseInt(boardValues[i]);
-                        x++;
-                        if(x == 13){
-                            x = 0;
-                            y++;
-                        }
-                    }
+                    board = new Board(boardValues);
 
                     System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
                     String move = null;
@@ -60,15 +54,7 @@ class Client {
                     System.out.println(s);
                     String[] boardValues;
                     boardValues = s.split(" ");
-                    int x=0,y=0;
-                    for(int i=0; i<boardValues.length;i++){
-                        board[x][y] = Integer.parseInt(boardValues[i]);
-                        x++;
-                        if(x == 13){
-                            x = 0;
-                            y++;
-                        }
-                    }
+                    board = new Board(boardValues);
                 }
 
 
