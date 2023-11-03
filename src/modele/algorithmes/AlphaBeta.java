@@ -1,14 +1,10 @@
 package modele.algorithmes;
 
-import modele.plan_de_jeu.Board;
-
-import java.util.ArrayList;
-
 public class AlphaBeta {
     private int numExploredNodes;
 
 //    // Retourne la liste des coups possibles. Cette liste contient
-//    // plusieurs coups possibles si et seuleument si plusieurs coups
+//    // plusieurs coups possibles si et seulement si plusieurs coups
 //    // ont le même score.
 //    public ArrayList<Move> getNextMoveAB(Board board) {
 //        numExploredNodes = 0;

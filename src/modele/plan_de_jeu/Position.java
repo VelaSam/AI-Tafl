@@ -3,9 +3,9 @@ package modele.plan_de_jeu;
 import modele.helpers.Helpers;
 
 public class Position {
-    private int i;
-    private int j;
-    private String boardPosition;
+    private final int i;
+    private final int j;
+    private final String boardPosition;
 
 
     public Position(int i, int j){
@@ -13,8 +13,16 @@ public class Position {
         this.j = j;
         this.boardPosition = Helpers.getLetterValue(j) + this.i;
     }
-    public int getI() { return this.i; }
-    public int getJ() { return this.j; }
-    public String getBoardPosition() { return this.boardPosition; }
 
+    public int getI() {
+        return i;
+    }
+
+    public int getJ() {
+        return j;
+    }
+
+    public String getBoardPosition() {
+        return boardPosition;
+    }
 }
