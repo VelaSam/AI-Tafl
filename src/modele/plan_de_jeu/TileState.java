@@ -24,4 +24,20 @@ public enum TileState {
         }
         throw new IllegalArgumentException("TileState not found.");
     }
+
+    public String toString(){
+        if(this == EMPTY){
+            return "_";
+        }
+        if(this == NOIR){
+            return "N";
+        }
+        if(this == ROUGE){
+            return "R";
+        }
+        if(this == ROI_NOIR){
+            return "K";
+        }
+        return "?";
+    }
 }
