@@ -95,21 +95,20 @@ public class Board {
     //Va recevoir un move tel que A5 - B5 et va ensuite modifier le board en consequence
     public void playMoveOnBoard(String move) {
         iterations++;
-        move = move.replace(" ", "");
-        String beginningSpace = move.split("-")[0];
-        String destinationSpace = move.split("-")[1];
+        String beginningSpace = move.split("-")[0].trim();
+        String destinationSpace = move.split("-")[1].trim();
 
         Tile beginningTile = tiles[Helpers.getNumberValue(String.valueOf(beginningSpace.charAt(0)))][Integer.parseInt(beginningSpace.substring(1))-1];
-        Tile destinationTile = tiles[Helpers.getNumberValue(String.valueOf(destinationSpace.charAt(0)))][Integer.parseInt(beginningSpace.substring(1))-1];
+        Tile destinationTile = tiles[Helpers.getNumberValue(String.valueOf(destinationSpace.charAt(0)))][Integer.parseInt(destinationSpace.substring(1))-1];
 
         TileState moverState = beginningTile.getState();
 
         if (beginningTile.getState() == TileState.EMPTY) {
-            throw new IllegalArgumentException("Beginning tile: tiles[" + beginningTile.getX() + "][" + beginningTile.getY() + "] is empty. Cannot make a move.");
+            throw new IllegalArgumentException("Beginning tile: tiles[" + beginningTile.getX() + "][" + beginningTile.getY() + "] " + Helpers.getLetterValue(beginningTile.getX())+(beginningTile.getY()+1) + " is empty. Cannot make a move.");
         }
 
         if (destinationTile.getState() != TileState.EMPTY) {
-            throw new IllegalArgumentException("Cannot move on a tile: tiles[" + beginningTile.getX() + "][" + beginningTile.getY() + "]  already containing a piece");
+            throw new IllegalArgumentException("Cannot move on a tile: tiles[" + destinationTile.getX() + "][" + destinationTile.getY() + "] " + Helpers.getLetterValue(destinationTile.getX())+(destinationTile.getY()+1) + " already containing a piece");
         }
 
         if(destinationTile.isMarkedX() && beginningTile.getState() != TileState.ROI_NOIR){
@@ -118,6 +117,7 @@ public class Board {
 
         beginningTile.setState(TileState.EMPTY);
         destinationTile.setState(moverState);
+        checkForPieceKill(destinationTile);
 
         // removeable
         System.out.println(this);
@@ -135,7 +135,6 @@ public class Board {
 
         for(int i = WIDTH-1; i >= 0; i--){
             for(int j = 0; j < WIDTH; j++){
-                String state;
                 boardStr.append(tiles[j][i].getState()).append(" ");
             }
         boardStr.append("\n");
@@ -150,5 +149,47 @@ public class Board {
     private boolean isBlockedTile(Tile tile){
         //if the tile has a piece on it OR has an X marked on it
         return tile.getState() != TileState.EMPTY || tile.isMarkedX();
+    }
+
+    private void checkForPieceKill(Tile movedPiece){
+        //will kill a piece if the enemy piece is between two pieces
+
+        Tile nextUp = null, nextDown = null, nextRight = null, nextLeft = null;
+
+        nextUp = movedPiece.getNextUp(tiles);
+        nextDown = movedPiece.getNextDown(tiles);
+        nextRight = movedPiece.getNextRight(tiles);
+        nextLeft = movedPiece.getNextLeft(tiles);
+
+        //Cette section check si la case a coter est de couleur opposee ET que la case APRES celle la est de la meme couleur que movedPiece
+        //si oui, KILL LA PIECE AONDOAWIDAOWIDN
+        if(nextUp != null && movedPiece.isOppositeColorOf(nextUp)){
+            Tile nextNextUp = nextUp.getNextUp(tiles);
+            if(nextNextUp != null && nextUp.isOppositeColorOf(nextNextUp)){
+                //kill
+                nextUp.setState(TileState.EMPTY);
+            }
+        }
+        if(nextDown != null && movedPiece.isOppositeColorOf(nextDown)){
+            Tile nextNextDown = nextDown.getNextDown(tiles);
+            if(nextNextDown != null && nextDown.isOppositeColorOf(nextNextDown)){
+                nextDown.setState(TileState.EMPTY);
+            }
+        }
+        if(nextRight != null && movedPiece.isOppositeColorOf(nextRight)){
+            Tile nextNextRight = nextRight.getNextRight(tiles);
+            if(nextNextRight != null && nextRight.isOppositeColorOf(nextNextRight)){
+                nextRight.setState(TileState.EMPTY);
+            }
+
+        }
+        if(nextLeft != null && movedPiece.isOppositeColorOf(nextLeft)){
+            Tile nextNextLeft = nextLeft.getNextLeft(tiles);
+            if(nextNextLeft != null && nextLeft.isOppositeColorOf(nextNextLeft)){
+                nextLeft.setState(TileState.EMPTY);
+            }
+        }
+
+
     }
 }
