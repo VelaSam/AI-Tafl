@@ -31,11 +31,11 @@ public class Board {
         }
     }
 
-    public Map<Tile, ArrayList<Position>> getPossibleMoves(){
+    public Map<Tile, List<Position>> getPossibleMoves(){
 
         // optimisation: a place de recreer la map a chaque fois, juste updater map qui existe deja
         // optimisation, envoyer la position a place de la tile
-        Map<Tile, ArrayList<Position>> positions = new HashMap<>();
+        Map<Tile, List<Position>> positions = new HashMap<>();
 
         ArrayList<Tile> maxPlayerPieces;
 
@@ -53,29 +53,29 @@ public class Board {
         return positions;
     }
 
-    private void skimThroughBoard(Map<Tile, ArrayList<Position>> positions, ArrayList<Tile> filteredTiles) {
+    private void skimThroughBoard(Map<Tile, List<Position>> positions, List<Tile> filteredTiles) {
         for(Tile tile: filteredTiles){
 
-            ArrayList<Position> availablePositions = new ArrayList<>();
+            List<Position> availablePositions = new ArrayList<>();
 
             //monter vers le haut
-            for(int i = tile.getPosition().getI() + 1; tile.getState() != TileState.EMPTY && i < this.WIDTH; i++){
+            for(int i = tile.getPosition().getI() + 1; tiles[i].getState() != TileState.EMPTY && i < this.WIDTH; i++){
                 availablePositions.add(new Position(i, tile.getPosition().getJ()));
             }
 
             // descendre vers le bas
-            for(int i = tile.getPosition().getI() - 1; tile.getState() != TileState.EMPTY && i >= 0; i--){
+            for(int i = tile.getPosition().getI() - 1; tiles[i].getState() != TileState.EMPTY && i >= 0; i--){
                 availablePositions.add(new Position(i, tile.getPosition().getJ()));
             }
 
             // vers la droite
-            for(int j = tile.getPosition().getJ() + 1; tile.getState() != TileState.EMPTY && j < this.WIDTH; j++){
+            for(int j = tile.getPosition().getJ() + 1; tiles[j].getState() != TileState.EMPTY && j < this.WIDTH; j++){
                 availablePositions.add(new Position(tile.getPosition().getI(), j));
 
             }
 
             // vers la gauche
-            for(int j = tile.getPosition().getJ() - 1; tile.getState() != TileState.EMPTY && j >= 0; j--){
+            for(int j = tile.getPosition().getJ() - 1; tiles[j].getState() != TileState.EMPTY && j >= 0; j--){
                 availablePositions.add(new Position(tile.getPosition().getI(), j));
             }
 

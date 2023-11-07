@@ -11,7 +11,8 @@ public class Position {
     public Position(int i, int j) {
         this.i = i;
         this.j = j;
-        this.boardPosition = Helpers.getLetterValue(j) + this.i;
+        this.boardPosition = Helpers.getLetterValue(i) + (this.j + 1);
+//        System.out.println("THIS IS THE POSITION:" + "I: " + i + ", J: " + j + " POSITION: " + this.boardPosition);
     }
 
     public int getI() {

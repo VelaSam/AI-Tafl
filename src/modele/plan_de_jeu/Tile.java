@@ -44,9 +44,7 @@ public class Tile {
     }
 
     public String toString(){
-        if(isX){
-            return "X";
-        }
+
         if(this.state == TileState.ROI_NOIR){
             return "ROI";
         }else{
