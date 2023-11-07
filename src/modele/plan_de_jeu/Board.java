@@ -22,6 +22,7 @@ public class Board {
         tiles = new Tile[WIDTH*WIDTH];
         int x = 0, y = 0;
         for (int i = 0; i < boardValues.length; i++) {
+            //time to change this shti wtf
             tiles[i] = new Tile(new Position(x, y), Integer.parseInt(boardValues[i]));
             x++;
             if (x == WIDTH) {
