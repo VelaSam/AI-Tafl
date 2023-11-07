@@ -4,7 +4,7 @@ public class Tile {
 
     private TileState state;
     private final boolean isX;
-    Position position;
+    private Position position;
 
     public Tile(Position position, int tileState) {
         this.position = position;

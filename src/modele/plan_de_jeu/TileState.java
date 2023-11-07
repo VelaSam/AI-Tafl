@@ -1,7 +1,7 @@
 package modele.plan_de_jeu;
 
 public enum TileState {
-    EMPTY(0), NOIR(2), ROUGE(4), ROI(5);
+    EMPTY(0), NOIR(2), ROUGE(4), ROI_NOIR(5);
 
     private final int value;
 

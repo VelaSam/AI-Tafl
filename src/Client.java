@@ -1,4 +1,6 @@
 import modele.plan_de_jeu.Board;
+import modele.plan_de_jeu.Tile;
+import modele.plan_de_jeu.TileState;
 
 import java.io.*;
 import java.net.*;
@@ -23,7 +25,7 @@ class Client {
 
                 cmd = (char)input.read();
                 System.out.println(cmd);
-                // Debut de la partie en joueur blanc
+                // Debut de la partie en joueur rouge
                 if(cmd == '1'){
                     byte[] aBuffer = new byte[1024];
 
@@ -34,7 +36,9 @@ class Client {
                     System.out.println(s);
                     String[] boardValues;
                     boardValues = s.split(" ");
-                    board = new Board(boardValues);
+                    board = new Board(boardValues, TileState.ROUGE);
+
+                    System.out.println(board.getPossibleMoves());
 
                     System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
                     String move = null;
@@ -54,7 +58,7 @@ class Client {
                     System.out.println(s);
                     String[] boardValues;
                     boardValues = s.split(" ");
-                    board = new Board(boardValues);
+                    board = new Board(boardValues, TileState.NOIR);
                 }
 
 
