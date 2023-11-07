@@ -36,12 +36,18 @@ class Client {
                     String[] boardValues;
                     boardValues = s.split(" ");
                     board = new Board(boardValues, TileState.ROUGE);
+                    System.out.println(board);
 
                     System.out.println(board.getPossibleMoves());
 
                     System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
                     String move = null;
                     move = console.readLine();
+
+                    board.playMoveOnBoard(move);
+
+                    System.out.println(board);
+
                     output.write(move.getBytes(),0,move.length());
                     output.flush();
                 }
@@ -57,9 +63,14 @@ class Client {
                     System.out.println(s);
                     String[] boardValues;
                     boardValues = s.split(" ");
+
+
                     board = new Board(boardValues, TileState.NOIR);
+                    System.out.println(board);
 
                     System.out.println(board.getPossibleMoves());
+                    System.out.println(board);
+
 
                 }
 
@@ -70,16 +81,23 @@ class Client {
                     byte[] aBuffer = new byte[16];
 
                     int size = input.available();
-                    System.out.println("size :" + size);
+//                    System.out.println("size :" + size);
                     input.read(aBuffer,0,size);
 
                     String s = new String(aBuffer);
                     System.out.println("Dernier coup :"+ s);
+
+                    board.playMoveOnBoard(s);
+
+
+                    System.out.println(board.getPossibleMoves());
                     System.out.println("Entrez votre coup : ");
                     String move = null;
                     move = console.readLine();
+                    board.playMoveOnBoard(move);
                     output.write(move.getBytes(),0,move.length());
                     output.flush();
+
 
                 }
                 // Le dernier coup est invalide
