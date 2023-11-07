@@ -1,5 +1,4 @@
 import modele.plan_de_jeu.Board;
-import modele.plan_de_jeu.Tile;
 import modele.plan_de_jeu.TileState;
 
 import java.io.*;
@@ -59,6 +58,9 @@ class Client {
                     String[] boardValues;
                     boardValues = s.split(" ");
                     board = new Board(boardValues, TileState.NOIR);
+
+                    System.out.println(board.getPossibleMoves());
+
                 }
 
 

@@ -25,4 +25,8 @@ public class Position {
     public String getBoardPosition() {
         return boardPosition;
     }
+
+    public String toString(){
+        return boardPosition;
+    }
 }

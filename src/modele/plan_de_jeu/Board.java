@@ -37,18 +37,18 @@ public class Board {
         // optimisation, envoyer la position a place de la tile
         Map<Tile, ArrayList<Position>> positions = new HashMap<>();
 
-        ArrayList<Tile> filteredTiles;
+        ArrayList<Tile> maxPlayerPieces;
 
         if(this.maxPlayer == TileState.NOIR){
             // optimisation: a place de recreer la map a chaque fois, juste updater map qui existe deja
-            filteredTiles = new ArrayList<>(Arrays.stream(tiles).filter(tile -> tile.getState() == TileState.NOIR ||
+            maxPlayerPieces = new ArrayList<>(Arrays.stream(tiles).filter(tile -> tile.getState() == TileState.NOIR ||
                     tile.getState() == TileState.ROI_NOIR).toList());
 
         } else {
-            filteredTiles = new ArrayList<>(Arrays.stream(tiles).filter(tile -> tile.getState() == TileState.ROUGE).toList());
+            maxPlayerPieces = new ArrayList<>(Arrays.stream(tiles).filter(tile -> tile.getState() == TileState.ROUGE).toList());
         }
 
-        skimThroughBoard(positions, filteredTiles);
+        skimThroughBoard(positions, maxPlayerPieces);
 
         return positions;
     }
@@ -59,23 +59,23 @@ public class Board {
             ArrayList<Position> availablePositions = new ArrayList<>();
 
             //monter vers le haut
-            for(int i = tile.getPosition().getI() + 1; tile.getState() != TileState.EMPTY && tile.getPosition().getI() < this.WIDTH; i++){
+            for(int i = tile.getPosition().getI() + 1; tile.getState() != TileState.EMPTY && i < this.WIDTH; i++){
                 availablePositions.add(new Position(i, tile.getPosition().getJ()));
             }
 
             // descendre vers le bas
-            for(int i = tile.getPosition().getI() - 1; tile.getState() != TileState.EMPTY && tile.getPosition().getI() >= 0; i--){
+            for(int i = tile.getPosition().getI() - 1; tile.getState() != TileState.EMPTY && i >= 0; i--){
                 availablePositions.add(new Position(i, tile.getPosition().getJ()));
             }
 
             // vers la droite
-            for(int j = tile.getPosition().getJ() + 1; tile.getState() != TileState.EMPTY && tile.getPosition().getJ() < this.WIDTH; j++){
+            for(int j = tile.getPosition().getJ() + 1; tile.getState() != TileState.EMPTY && j < this.WIDTH; j++){
                 availablePositions.add(new Position(tile.getPosition().getI(), j));
 
             }
 
             // vers la gauche
-            for(int j = tile.getPosition().getJ() - 1; tile.getState() != TileState.EMPTY && tile.getPosition().getJ() >= 0; j--){
+            for(int j = tile.getPosition().getJ() - 1; tile.getState() != TileState.EMPTY && j >= 0; j--){
                 availablePositions.add(new Position(tile.getPosition().getI(), j));
             }
 
