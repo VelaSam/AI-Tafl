@@ -58,24 +58,26 @@ public class Board {
 
             List<Position> availablePositions = new ArrayList<>();
 
-            //monter vers le haut
-            for(int i = tile.getPosition().getX() + 1; tiles[i].getState() != TileState.EMPTY && i < this.WIDTH; i++){
+            //aller vers la droite
+            for(int i = tile.getPosition().getX() + 1; i < this.WIDTH && tiles[i + tile.getPosition().getY()].getState() == TileState.EMPTY; i++){
                 availablePositions.add(new Position(i, tile.getPosition().getY()));
             }
 
-            // descendre vers le bas
-            for(int i = tile.getPosition().getX() - 1; tiles[i].getState() != TileState.EMPTY && i >= 0; i--){
+            // aller vers la gauche
+            for(int i = tile.getPosition().getX() - 1; i >= 0 && tiles[i + tile.getPosition().getY()].getState() == TileState.EMPTY; i--){
                 availablePositions.add(new Position(i, tile.getPosition().getY()));
             }
 
-            // vers la droite
-            for(int j = tile.getPosition().getY() + 1; tiles[j].getState() != TileState.EMPTY && j < this.WIDTH; j++){
+            // vers le haut
+            for(int j = tile.getPosition().getY() + 1; j < this.WIDTH && tiles[j + tile.getPosition().getX()].getState() == TileState.EMPTY; j++){
+                System.out.println(tiles[j + tile.getPosition().getX()].getState() + " " + tiles[j + tile.getPosition().getX()].getPosition());
+
                 availablePositions.add(new Position(tile.getPosition().getX(), j));
 
             }
 
-            // vers la gauche
-            for(int j = tile.getPosition().getY() - 1; tiles[j].getState() != TileState.EMPTY && j >= 0; j--){
+            // vers le bas
+            for(int j = tile.getPosition().getY() - 1; j >= 0 && tiles[j + tile.getPosition().getX()].getState() == TileState.EMPTY; j--){
                 availablePositions.add(new Position(tile.getPosition().getX(), j));
             }
 
