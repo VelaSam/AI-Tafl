@@ -59,24 +59,24 @@ public class Board {
             List<Position> availablePositions = new ArrayList<>();
 
             //monter vers le haut
-            for(int i = tile.getPosition().getI() + 1; tiles[i].getState() != TileState.EMPTY && i < this.WIDTH; i++){
-                availablePositions.add(new Position(i, tile.getPosition().getJ()));
+            for(int i = tile.getPosition().getX() + 1; tiles[i].getState() != TileState.EMPTY && i < this.WIDTH; i++){
+                availablePositions.add(new Position(i, tile.getPosition().getY()));
             }
 
             // descendre vers le bas
-            for(int i = tile.getPosition().getI() - 1; tiles[i].getState() != TileState.EMPTY && i >= 0; i--){
-                availablePositions.add(new Position(i, tile.getPosition().getJ()));
+            for(int i = tile.getPosition().getX() - 1; tiles[i].getState() != TileState.EMPTY && i >= 0; i--){
+                availablePositions.add(new Position(i, tile.getPosition().getY()));
             }
 
             // vers la droite
-            for(int j = tile.getPosition().getJ() + 1; tiles[j].getState() != TileState.EMPTY && j < this.WIDTH; j++){
-                availablePositions.add(new Position(tile.getPosition().getI(), j));
+            for(int j = tile.getPosition().getY() + 1; tiles[j].getState() != TileState.EMPTY && j < this.WIDTH; j++){
+                availablePositions.add(new Position(tile.getPosition().getX(), j));
 
             }
 
             // vers la gauche
-            for(int j = tile.getPosition().getJ() - 1; tiles[j].getState() != TileState.EMPTY && j >= 0; j--){
-                availablePositions.add(new Position(tile.getPosition().getI(), j));
+            for(int j = tile.getPosition().getY() - 1; tiles[j].getState() != TileState.EMPTY && j >= 0; j--){
+                availablePositions.add(new Position(tile.getPosition().getX(), j));
             }
 
             positions.put(tile, availablePositions);

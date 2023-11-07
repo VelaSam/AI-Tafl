@@ -3,24 +3,24 @@ package modele.plan_de_jeu;
 public class Tile {
 
     private TileState state;
-    private final boolean isX;
+    private final boolean isMarkedX;
     private Position position;
 
     public Tile(Position position, int tileState) {
         this.position = position;
         this.state = TileState.getTileState(tileState);
 
-        isX = isXTile(position);
+        isMarkedX = isTileMarkedX(position);
     }
 
-    private boolean isXTile(Position position) {
-        if (position.getI() == 12 || position.getI() == 0) {
-            if (position.getJ() == 0) {
+    private boolean isTileMarkedX(Position position) {
+        if (position.getX() == 12 || position.getX() == 0) {
+            if (position.getY() == 0) {
                 return true;
             }
-            return position.getJ() == 12;
+            return position.getY() == 12;
         } else
-            return position.getI() == 6 && position.getJ() == 6;
+            return position.getX() == 6 && position.getY() == 6;
     }
 
     public TileState getState() {
@@ -31,8 +31,8 @@ public class Tile {
         this.state = state;
     }
 
-    public boolean isX() {
-        return isX;
+    public boolean isMarkedX() {
+        return isMarkedX;
     }
 
     public Position getPosition() {
