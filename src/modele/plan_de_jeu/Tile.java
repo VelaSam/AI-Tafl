@@ -23,6 +23,14 @@ public class Tile {
             return position.getX() == 6 && position.getY() == 6;
     }
 
+    public int getX(){
+        return this.position.getX();
+    }
+
+    public int getY(){
+        return this.position.getY();
+    }
+
     public TileState getState() {
         return state;
     }
