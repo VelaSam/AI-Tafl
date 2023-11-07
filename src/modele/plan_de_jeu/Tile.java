@@ -108,4 +108,13 @@ public class Tile {
 
     }
 
+
+    public String singleCharacterStateString(){
+        if(this.isMarkedX && this.state == TileState.EMPTY){
+            return "X";
+        }
+        else
+            return this.state.toString();
+    }
+
 }
