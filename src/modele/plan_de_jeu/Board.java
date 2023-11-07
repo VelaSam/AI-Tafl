@@ -56,6 +56,9 @@ public class Board {
         return positions;
     }
 
+//    To parallelize the code, you can use Java's ExecutorService and the submit method
+//    to create and run tasks concurrently. You can divide the work into separate tasks for
+//    each Tile in the filteredTiles list. Here's a parallelized version of your code:
     private void skimThroughBoard(Map<Tile, List<Position>> positions, List<Tile> filteredTiles) {
         for(Tile tile: filteredTiles){
 
