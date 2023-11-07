@@ -1,6 +1,7 @@
 package modele.plan_de_jeu;
 
 import modele.helpers.Helpers;
+import modele.helpers.IllegalMoveException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -93,7 +94,7 @@ public class Board {
 
 
     //Va recevoir un move tel que A5 - B5 et va ensuite modifier le board en consequence
-    public void playMoveOnBoard(String move) {
+    public void playMoveOnBoard(String move) throws IllegalMoveException {
         iterations++;
         move = move.replace(" ", "");
         String beginningSpace = move.split("-")[0];
@@ -105,15 +106,15 @@ public class Board {
         TileState moverState = beginningTile.getState();
 
         if (beginningTile.getState() == TileState.EMPTY) {
-            throw new IllegalArgumentException("Beginning tile: tiles[" + beginningTile.getX() + "][" + beginningTile.getY() + "] is empty. Cannot make a move.");
+            throw new IllegalMoveException(move, "Beginning tile: tiles[" + beginningTile.getX() + "][" + beginningTile.getY() + "] is empty.");
         }
 
         if (destinationTile.getState() != TileState.EMPTY) {
-            throw new IllegalArgumentException("Cannot move on a tile: tiles[" + beginningTile.getX() + "][" + beginningTile.getY() + "]  already containing a piece");
+            throw new IllegalMoveException(move, "Destination tile: tiles[" + destinationTile.getX() + "][" + destinationTile.getY() + "]  already contains a piece.");
         }
 
         if(destinationTile.isMarkedX() && beginningTile.getState() != TileState.ROI_NOIR){
-            throw new IllegalArgumentException("A non king piece cannot move on a X tile: tiles[" + beginningTile.getX() + "][" + beginningTile.getY() + "]  ");
+            throw new IllegalMoveException(move, "Destination tile: tiles[" + destinationTile.getX() + "][" + destinationTile.getY() + "] is an X-tile while Beginning tile: tiles[" + beginningTile.getX() + "][" + beginningTile.getY() + "] is not the King.");
         }
 
         beginningTile.setState(TileState.EMPTY);
