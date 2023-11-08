@@ -25,7 +25,7 @@ public class Board {
         this.tiles = new Tile[WIDTH][WIDTH];
         for (int j = WIDTH-1; j >= 0; j--) {
             for(int i = 0 ; i < WIDTH; i++){
-                tiles[i][j] = new Tile(new Position(i, j), tiles[i][j].getState());
+                this.tiles[i][j] = new Tile(new Position(i, j), tiles[i][j].getState());
             }
         }
         this.maxPlayer = playerColor;
@@ -38,19 +38,22 @@ public class Board {
         return minPlayer;
     }
 
-    public Board checkMove(Position move, TileState color) {
+    public Board checkMove(Tile currentTile, Position move, TileState color) {
         Board clonedBoard = this.clone(this.tiles, color);
 
-        System.out.println(clonedBoard);
-
-        clonedBoard.tiles[move.getX()][move.getY()].setState(color == TileState.ROUGE ? TileState.NOIR : TileState.ROUGE);
+//        System.out.println(move.getBoardPosition());
+//        System.out.println(move.getX());
+//        System.out.println(move.getY());
+//        System.out.println(clonedBoard.tiles[move.getX()][move.getY()]);
+////        System.out.println(clonedBoard);
+        clonedBoard.tiles[currentTile.getX()][currentTile.getY()].setState(TileState.EMPTY);
+        clonedBoard.tiles[move.getX()][move.getY()].setState(color == TileState.ROUGE ? TileState.ROUGE : TileState.NOIR);
         // clonedBoard.nextMarkToPlay = nextMarkToPlay == Mark.X ? Mark.O : Mark.X; huh
         return clonedBoard;
     }
 
     public Board clone(Tile[][] tiles, TileState playerColor){
-        Board clonedBoard = new Board(tiles, playerColor);
-        return clonedBoard;
+        return new Board(tiles, playerColor);
     }
 
     public void initializeNewBoard(String[] boardValues) {

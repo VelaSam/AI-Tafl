@@ -33,20 +33,24 @@ public class AlphaBeta {
         for (Map.Entry<Tile, List<Position>> entry : possibleMoves.entrySet()) {
             Tile tile = entry.getKey();
             List<Position> positions = entry.getValue();
+            ArrayList<Position> positionsToSend = new ArrayList<>();
 
             for (Position position : positions) {
-                Board boardWithNextMove = board.checkMove(position, playerColor);
+                Board boardWithNextMove = board.checkMove(tile, position, playerColor);
                 double value = minValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(), resultValue, Double.POSITIVE_INFINITY);
                 if (value >= resultValue) {
                     if (value > resultValue) {
                         result.clear();
                     }
-                    result.put(tile, (ArrayList<Position>) result); // ???????????
+                    positionsToSend.add(position); // ???????????
+                    System.out.println(positionsToSend);
                     resultValue = value;
                 }
             }
+            if (!positionsToSend.isEmpty()) {
+                result.put(tile, positionsToSend);
+            }
         }
-
         return result;
     }
 
@@ -65,7 +69,7 @@ public class AlphaBeta {
             List<Position> positions = entry.getValue();
 
             for (Position position : positions) {
-                Board boardWithNextMove = positionActuelle.checkMove(position, playerColor);
+                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position, playerColor);
                 double score = minValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(),
                         Math.max(alpha, value), beta);
                 value = Math.max(value, score);
@@ -92,7 +96,7 @@ public class AlphaBeta {
             List<Position> positions = entry.getValue();
 
             for (Position position : positions) {
-                Board boardWithNextMove = positionActuelle.checkMove(position, playerColor);
+                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position, playerColor);
                 double score = maxValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(),
                         Math.min(alpha, value), beta);
                 value = Math.min(value, score);
