@@ -206,30 +206,49 @@ public class Board {
         if(nextUp != null && movedPiece.isOppositeColorOf(nextUp)){
             Tile nextNextUp = nextUp.getNextUp(tiles);
             if(nextNextUp != null && (nextUp.isOppositeColorOf(nextNextUp) || nextNextUp.isMarkedX())){
-                //kill
-                nextUp.setState(TileState.EMPTY);
+                if(nextUp.getState() != TileState.ROI_NOIR){
+                    this.decrementColorPiece(nextUp.getState());
+                    nextUp.setState(TileState.EMPTY);
+                }
             }
         }
         if(nextDown != null && movedPiece.isOppositeColorOf(nextDown)){
             Tile nextNextDown = nextDown.getNextDown(tiles);
             if(nextNextDown != null && (nextDown.isOppositeColorOf(nextNextDown) || nextNextDown.isMarkedX())){
-                nextDown.setState(TileState.EMPTY);
+                if(nextDown.getState() != TileState.ROI_NOIR){
+                    this.decrementColorPiece(nextDown.getState());
+                    nextDown.setState(TileState.EMPTY);
+                }
             }
         }
         if(nextRight != null && movedPiece.isOppositeColorOf(nextRight)){
             Tile nextNextRight = nextRight.getNextRight(tiles);
             if(nextNextRight != null && (nextRight.isOppositeColorOf(nextNextRight) || nextNextRight.isMarkedX())){
-                nextRight.setState(TileState.EMPTY);
+                if(nextRight.getState() != TileState.ROI_NOIR){
+                    this.decrementColorPiece(nextRight.getState());
+                    nextRight.setState(TileState.EMPTY);
+                }
             }
 
         }
         if(nextLeft != null && movedPiece.isOppositeColorOf(nextLeft)){
             Tile nextNextLeft = nextLeft.getNextLeft(tiles);
             if(nextNextLeft != null && (nextLeft.isOppositeColorOf(nextNextLeft) || nextNextLeft.isMarkedX())){
-                nextLeft.setState(TileState.EMPTY);
+                if(nextLeft.getState() != TileState.ROI_NOIR){
+                    this.decrementColorPiece(nextLeft.getState());
+                    nextLeft.setState(TileState.EMPTY);
+                }
             }
         }
 
 
+    }
+
+    private void decrementColorPiece(TileState tileState){
+        if(tileState == maxPlayer){
+            maxPlayerPiecesCounter--;
+        } else if(tileState == minPlayer){
+            minPlayerPiecesCounter--;
+        }
     }
 }
