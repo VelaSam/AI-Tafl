@@ -15,11 +15,42 @@ public class Board {
 
     public static int iterations = 0;
 
-
     public Board(String[] boardValues, TileState couleur) {
         initializeNewBoard(boardValues);
         this.maxPlayer = couleur;
         this.minPlayer = this.maxPlayer == TileState.NOIR ? TileState.ROUGE : TileState.NOIR;
+    }
+
+    public Board(Tile[][] tiles, TileState playerColor){
+        this.tiles = new Tile[WIDTH][WIDTH];
+        for (int j = WIDTH-1; j >= 0; j--) {
+            for(int i = 0 ; i < WIDTH; i++){
+                tiles[i][j] = new Tile(new Position(i, j), tiles[i][j].getState());
+            }
+        }
+        this.maxPlayer = playerColor;
+        this.minPlayer = this.maxPlayer == TileState.NOIR ? TileState.ROUGE : TileState.NOIR;
+    }
+    public TileState getMaxPlayer() {
+        return maxPlayer;
+    }
+    public TileState getMinPlayer() {
+        return minPlayer;
+    }
+
+    public Board checkMove(Position move, TileState color) {
+        Board clonedBoard = this.clone(this.tiles, color);
+
+        System.out.println(clonedBoard);
+
+        clonedBoard.tiles[move.getX()][move.getY()].setState(color == TileState.ROUGE ? TileState.NOIR : TileState.ROUGE);
+        // clonedBoard.nextMarkToPlay = nextMarkToPlay == Mark.X ? Mark.O : Mark.X; huh
+        return clonedBoard;
+    }
+
+    public Board clone(Tile[][] tiles, TileState playerColor){
+        Board clonedBoard = new Board(tiles, playerColor);
+        return clonedBoard;
     }
 
     public void initializeNewBoard(String[] boardValues) {
@@ -46,7 +77,6 @@ public class Board {
                     .flatMap(Arrays::stream)
                     .filter(tile -> tile.getState() == TileState.NOIR || tile.getState() == TileState.ROI_NOIR)
                     .collect(Collectors.toList());
-
         } else {
             maxPlayerPieces = Arrays.stream(tiles)
                     .flatMap(Arrays::stream)
@@ -59,37 +89,10 @@ public class Board {
         return positions;
     }
 
-//    To parallelize the code, you can use Java's ExecutorService and the submit method
-//    to create and run tasks concurrently. You can divide the work into separate tasks for
-//    each Tile in the filteredTiles list. Here's a parallelized version of your code:
-    private void skimThroughBoard(Map<Tile, List<Position>> positions, List<Tile> filteredTiles) {
-        for(Tile tile: filteredTiles){
-
-            List<Position> availablePositions = new ArrayList<>();
-
-            //aller vers la droite
-            for(int i = tile.getX() + 1; i < WIDTH && !isBlockedTile(tiles[i][tile.getY()]); i++){
-                availablePositions.add(new Position(i, tile.getY()));
-            }
-            //aller vers la gauche
-            for(int i = tile.getX() - 1; i >= 0 && !isBlockedTile(tiles[i][tile.getY()]); i--){
-                availablePositions.add(new Position(i, tile.getY()));
-            }
-            //aller vers le haut
-            for(int j = tile.getY() + 1; j < WIDTH && !isBlockedTile(tiles[tile.getX()][j]); j++){
-                availablePositions.add(new Position(tile.getX(), j));
-            }
-            // aller vers le bas
-            for(int j = tile.getY() - 1; j >= 0 && !isBlockedTile(tiles[tile.getX()][j]); j--){
-                availablePositions.add(new Position(tile.getX(), j));
-            }
-            positions.put(tile, availablePositions);
-        }
-    }
-
 
     //Va recevoir un move tel que "A5 - B5@" et va ensuite modifier le board en consequence
     public void playMoveOnBoard(String move) {
+
         iterations++;
         String beginningSpace = move.split("-")[0].trim();
         String destinationSpace = move.split("-")[1].trim();
@@ -101,6 +104,13 @@ public class Board {
         Tile destinationTile = tiles
                 [Helpers.getNumberValue(String.valueOf(destinationSpace.charAt(0)))]
                 [Integer.parseInt(destinationSpace.substring(1))-1];
+
+        if (beginningTile.getX() != destinationTile.getX() && beginningTile.getY() != destinationTile.getY()) {
+            throw new IllegalArgumentException("The piece at the tile " +
+                    Helpers.getLetterValue(beginningTile.getX()) + (beginningTile.getY() + 1) +
+                    " may not go to " + Helpers.getLetterValue(destinationTile.getX()) + (destinationTile.getY() + 1));
+        }
+
 
         TileState moverState = beginningTile.getState();
 
@@ -132,24 +142,47 @@ public class Board {
 
     public String toString(){
         StringBuilder boardStr = new StringBuilder("");
-
         if(iterations == 0){
             boardStr.append("Game start \n");
         }else{
             boardStr.append("Move number: ").append(iterations).append(" \n");
         }
-
         for(int i = WIDTH-1; i >= 0; i--){
             for(int j = 0; j < WIDTH; j++){
                 boardStr.append(tiles[j][i].singleCharacterStateString()).append(" ");
             }
         boardStr.append("\n");
         }
-
         return boardStr.toString();
     }
 
+//    To parallelize the code, you can use Java's ExecutorService and the submit method
+//    to create and run tasks concurrently. You can divide the work into separate tasks for
+//    each Tile in the filteredTiles list. Here's a parallelized version of your code:
+    private void skimThroughBoard(Map<Tile, List<Position>> positions, List<Tile> filteredTiles) {
+        for(Tile tile: filteredTiles){
 
+            List<Position> availablePositions = new ArrayList<>();
+
+            //aller vers la droite
+            for(int i = tile.getX() + 1; i < WIDTH && !isBlockedTile(tiles[i][tile.getY()]); i++){
+                availablePositions.add(new Position(i, tile.getY()));
+            }
+            //aller vers la gauche
+            for(int i = tile.getX() - 1; i >= 0 && !isBlockedTile(tiles[i][tile.getY()]); i--){
+                availablePositions.add(new Position(i, tile.getY()));
+            }
+            //aller vers le haut
+            for(int j = tile.getY() + 1; j < WIDTH && !isBlockedTile(tiles[tile.getX()][j]); j++){
+                availablePositions.add(new Position(tile.getX(), j));
+            }
+            // aller vers le bas
+            for(int j = tile.getY() - 1; j >= 0 && !isBlockedTile(tiles[tile.getX()][j]); j--){
+                availablePositions.add(new Position(tile.getX(), j));
+            }
+            positions.put(tile, availablePositions);
+        }
+    }
     private boolean isBlockedTile(Tile tile){
         //if the tile has a piece on it OR has an X marked on it
         return tile.getState() != TileState.EMPTY || tile.isMarkedX();

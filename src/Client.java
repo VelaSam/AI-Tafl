@@ -1,8 +1,15 @@
+import modele.ai.AlphaBeta;
 import modele.plan_de_jeu.Board;
+import modele.plan_de_jeu.Position;
+import modele.plan_de_jeu.Tile;
 import modele.plan_de_jeu.TileState;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 class Client {
@@ -12,6 +19,8 @@ class Client {
         BufferedInputStream input;
         BufferedOutputStream output;
         Board board = null; // Board vide.
+
+        AlphaBeta alphaBeta = new AlphaBeta();
 
         try {
             MyClient = new Socket("localhost", 8888);
@@ -42,7 +51,12 @@ class Client {
 
                     System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
                     String move = null;
-                    move = console.readLine();
+//                    move = console.readLine();
+
+                    Map<Tile, ArrayList<Position>> moves = alphaBeta.getNextMoveAB(board);
+                    Tile firstTile = board.getPossibleMoves().keySet().iterator().next(); // Get the first key
+                    ArrayList<Position> firstMove = moves.get(board.getPossibleMoves().get(firstTile)); // Get the first value
+                    move = firstMove.get(0).toString();
 
                     board.playMoveOnBoard(move);
 

@@ -15,14 +15,21 @@ public class Tile {
         isMarkedX = isTileMarkedX(position);
     }
 
+    public Tile(Position position, TileState tileState){
+        this.position = position;
+        this.state = tileState;
+
+        isMarkedX = isTileMarkedX(position);
+    }
+
     private boolean isTileMarkedX(Position position) {
         if (position.getX() == 12 || position.getX() == 0) {
             if (position.getY() == 0) {
                 return true;
             }
-            return position.getY() == 12;
+            return position.getY() == WIDTH - 1;
         } else
-            return position.getX() == 6 && position.getY() == 6;
+            return position.getX() == WIDTH/2 && position.getY() == WIDTH/2;
     }
 
     public boolean isOppositeColorOf(Tile otherTile){
