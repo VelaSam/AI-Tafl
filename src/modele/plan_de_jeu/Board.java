@@ -207,7 +207,6 @@ public class Board {
             Tile nextNextUp = nextUp.getNextUp(tiles);
             if(nextNextUp != null && (nextUp.isOppositeColorOf(nextNextUp) || nextNextUp.isMarkedX())){
                 if(nextUp.getState() != TileState.ROI_NOIR){
-                    this.decrementColorPiece(nextUp.getState());
                     nextUp.setState(TileState.EMPTY);
                 }
             }
@@ -216,7 +215,6 @@ public class Board {
             Tile nextNextDown = nextDown.getNextDown(tiles);
             if(nextNextDown != null && (nextDown.isOppositeColorOf(nextNextDown) || nextNextDown.isMarkedX())){
                 if(nextDown.getState() != TileState.ROI_NOIR){
-                    this.decrementColorPiece(nextDown.getState());
                     nextDown.setState(TileState.EMPTY);
                 }
             }
@@ -225,7 +223,6 @@ public class Board {
             Tile nextNextRight = nextRight.getNextRight(tiles);
             if(nextNextRight != null && (nextRight.isOppositeColorOf(nextNextRight) || nextNextRight.isMarkedX())){
                 if(nextRight.getState() != TileState.ROI_NOIR){
-                    this.decrementColorPiece(nextRight.getState());
                     nextRight.setState(TileState.EMPTY);
                 }
             }
@@ -235,20 +232,11 @@ public class Board {
             Tile nextNextLeft = nextLeft.getNextLeft(tiles);
             if(nextNextLeft != null && (nextLeft.isOppositeColorOf(nextNextLeft) || nextNextLeft.isMarkedX())){
                 if(nextLeft.getState() != TileState.ROI_NOIR){
-                    this.decrementColorPiece(nextLeft.getState());
                     nextLeft.setState(TileState.EMPTY);
                 }
             }
         }
 
 
-    }
-
-    private void decrementColorPiece(TileState tileState){
-        if(tileState == maxPlayer){
-            maxPlayerPiecesCounter--;
-        } else if(tileState == minPlayer){
-            minPlayerPiecesCounter--;
-        }
     }
 }
