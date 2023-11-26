@@ -22,9 +22,9 @@ public class Board {
 
     public static int iterations = 0;
 
-    public Board(String[] boardValues, TileState couleur) {
+    public Board(String[] boardValues, TileState playerColor) {
         initializeNewBoard(boardValues);
-        this.maxPlayer = couleur;
+        this.maxPlayer = playerColor;
         this.minPlayer = this.maxPlayer == TileState.NOIR ? TileState.ROUGE : TileState.NOIR;
         this.countCurrentPiecesOnBoard();
     }
@@ -68,8 +68,13 @@ public class Board {
 //        System.out.println(move.getY());
 //        System.out.println(clonedBoard.tiles[move.getX()][move.getY()]);
 ////        System.out.println(clonedBoard);
-        clonedBoard.tiles[currentTile.getX()][currentTile.getY()].setState(TileState.EMPTY);
-        clonedBoard.tiles[move.getX()][move.getY()].setState(color == TileState.ROUGE ? TileState.ROUGE : TileState.NOIR);
+
+
+//        clonedBoard.tiles[currentTile.getX()][currentTile.getY()].setState(TileState.EMPTY);
+//        clonedBoard.tiles[move.getX()][move.getY()].setState(color == TileState.ROUGE ? TileState.ROUGE : TileState.NOIR);
+
+        clonedBoard.playMoveOnBoard(currentTile.getPosition() + " - " +  move.getBoardPosition());
+
         return clonedBoard;
     }
 
@@ -118,6 +123,9 @@ public class Board {
     public void playMoveOnBoard(String move) {
 
         iterations++;
+
+        System.out.println(move);
+
         String beginningSpace = move.split("-")[0].trim();
         String destinationSpace = move.split("-")[1].trim();
 
@@ -295,5 +303,9 @@ public class Board {
 
     public int getRedPieces() {
         return redPieces;
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
     }
 }
