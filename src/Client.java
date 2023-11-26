@@ -46,7 +46,7 @@ class Client {
                     String[] boardValues;
                     boardValues = s.split(" ");
                     board = new Board(boardValues, TileState.ROUGE);
-                    System.out.println(board);
+//                    System.out.println(board);
 
                     System.out.println(board.getPossibleMoves());
 
@@ -65,7 +65,7 @@ class Client {
                     System.out.println(move);
                     board.playMoveOnBoard(move);
 
-                    System.out.println(board);
+//                    System.out.println(board);
 
                     output.write(move.getBytes(),0,move.length());
                     output.flush();
@@ -84,7 +84,7 @@ class Client {
                     boardValues = s.split(" ");
 
                     board = new Board(boardValues, TileState.NOIR);
-                    System.out.println(board);
+//                    System.out.println(board);
 
                     output.flush();
 
@@ -122,7 +122,7 @@ class Client {
                     System.out.println(move);
                     board.playMoveOnBoard(move);
 
-                    System.out.println(board);
+//                    System.out.println(board);
 
                     output.write(move.getBytes(),0,move.length());
                     output.flush();

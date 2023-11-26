@@ -1,6 +1,5 @@
 package modele.ai;
 
-import modele.helpers.Helpers;
 import modele.plan_de_jeu.Board;
 import modele.plan_de_jeu.Position;
 import modele.plan_de_jeu.Tile;
