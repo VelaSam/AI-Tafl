@@ -7,10 +7,7 @@ import modele.plan_de_jeu.TileState;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 class Client {
@@ -20,6 +17,7 @@ class Client {
         BufferedInputStream input;
         BufferedOutputStream output;
         Board board = null; // Board vide.
+        Map.Entry<Tile, Position> bestMove;
 
         AlphaBeta alphaBeta = new AlphaBeta();
 
@@ -48,19 +46,19 @@ class Client {
                     board = new Board(boardValues, TileState.ROUGE);
 //                    System.out.println(board);
 
-                    System.out.println(board.getPossibleMoves());
+//                    System.out.println(board.getPossibleMoves());
 
                     System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
                     String move = null;
 //                    move = console.readLine();
-
-                    Map<Tile, ArrayList<Position>> moves = alphaBeta.getNextMoveAB(board);
-                    Map.Entry<Tile, ArrayList<Position>> firstEntry  = moves.entrySet().iterator().next();
-//                    System.out.println(moves);// Get the first entry
-                    Tile firstTile = firstEntry.getKey(); // Get the first tile
-                    Position firstPosition = moves.get(firstTile).get(0); // Get the first position
-                    move = Helpers.getLetterValue(firstTile.getX()) + (firstTile.getY()+1) + " - "
-                            + Helpers.getLetterValue(firstPosition.getX()) + (firstPosition.getY()+1);
+//                    Map<Tile, ArrayList<Position>> moves = alphaBeta.getNextMoveAB(board);
+//                    Map.Entry<Tile, ArrayList<Position>> firstEntry  = moves.entrySet().iterator().next();
+////                    System.out.println(moves);// Get the first entry
+//                    Tile firstTile = firstEntry.getKey(); // Get the first tile
+//                    Position firstPosition = moves.get(firstTile).get(0); // Get the first position
+                    bestMove = AlphaBeta.getNextMoveAB(board);
+                    move = Helpers.getLetterValue(bestMove.getKey().getPosition().getX()) + (bestMove.getKey().getPosition().getY()+1) + " - "
+                            + Helpers.getLetterValue(bestMove.getValue().getX()) + (bestMove.getValue().getY()+1);
 
                     System.out.println(move);
                     board.playMoveOnBoard(move);
@@ -106,20 +104,22 @@ class Client {
                     board.playMoveOnBoard(s);
 
 
-                    System.out.println(board.getPossibleMoves());
+//                    System.out.println(board.getPossibleMoves());
                     System.out.println("Entrez votre coup : ");
                     String move = null;
 //                    move = console.readLine();
 
-                    Map<Tile, ArrayList<Position>> moves = alphaBeta.getNextMoveAB(board);
-                    Map.Entry<Tile, ArrayList<Position>> firstEntry  = moves.entrySet().iterator().next();
-//                    System.out.println(moves);// Get the first entry
-                    Tile firstTile = firstEntry.getKey(); // Get the first tile
-                    Position firstPosition = moves.get(firstTile).get(0); // Get the first position
-                    move = Helpers.getLetterValue(firstTile.getX()) + (firstTile.getY()+1) + " - "
-                            + Helpers.getLetterValue(firstPosition.getX()) + (firstPosition.getY()+1);
+//                    Map<Tile, ArrayList<Position>> moves = alphaBeta.getNextMoveAB(board);
+//                    Map.Entry<Tile, ArrayList<Position>> firstEntry  = moves.entrySet().iterator().next();
+////                    System.out.println(moves);// Get the first entry
+//                    Tile firstTile = firstEntry.getKey(); // Get the first tile
+//                    Random random = new Random();
+//                    Position firstPosition = moves.get(firstTile).get(random.nextInt(firstEntry.getValue().size())); // Get the first position
+                    bestMove = AlphaBeta.getNextMoveAB(board);
+                    move = Helpers.getLetterValue(bestMove.getKey().getPosition().getX()) + (bestMove.getKey().getPosition().getY()+1) + " - "
+                            + Helpers.getLetterValue(bestMove.getValue().getX()) + (bestMove.getValue().getY()+1);
 
-                    System.out.println(move);
+//                    System.out.println(move);
                     board.playMoveOnBoard(move);
 
 //                    System.out.println(board);

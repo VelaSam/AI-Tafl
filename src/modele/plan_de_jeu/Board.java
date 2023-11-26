@@ -124,7 +124,7 @@ public class Board {
 
         iterations++;
 
-        System.out.println(move);
+//        System.out.println(move);
 
         String beginningSpace = move.split("-")[0].trim();
         String destinationSpace = move.split("-")[1].trim();

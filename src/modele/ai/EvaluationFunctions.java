@@ -16,7 +16,7 @@ public class EvaluationFunctions {
         int colorNumberPieces = board.getPlayerPiecesCounter(color);
         int oppositeNumberPieces = board.getPlayerPiecesCounter(opposite);
 
-        System.out.println(colorNumberPieces +  " AND " + oppositeNumberPieces);
+//        System.out.println(colorNumberPieces +  " AND " + oppositeNumberPieces);
 
 
         if(color == TileState.NOIR){
@@ -28,7 +28,7 @@ public class EvaluationFunctions {
             oppositeNumberPieces*=24;
         }
 
-        System.out.println(colorNumberPieces +  " AND " + oppositeNumberPieces);
+//        System.out.println(colorNumberPieces +  " AND " + oppositeNumberPieces);
 
         return colorNumberPieces-oppositeNumberPieces;
     }
