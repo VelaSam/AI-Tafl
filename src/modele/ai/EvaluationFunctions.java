@@ -1,5 +1,6 @@
 package modele.ai;
 
+import modele.helpers.Helpers;
 import modele.plan_de_jeu.Board;
 import modele.plan_de_jeu.TileState;
 
@@ -7,7 +8,7 @@ public class EvaluationFunctions {
 
     public static int evaluate(Board board, TileState color){
 
-        TileState opposite = color == TileState.NOIR ? TileState.ROUGE : TileState.NOIR;
+        TileState opposite = Helpers.getOppositeTileState(color);
 
         if(kingInCorner(board)){
             return color == TileState.ROUGE ? Integer.MIN_VALUE : Integer.MAX_VALUE;
@@ -16,7 +17,7 @@ public class EvaluationFunctions {
         int colorNumberPieces = board.getPlayerPiecesCounter(color);
         int oppositeNumberPieces = board.getPlayerPiecesCounter(opposite);
 
-        System.out.println(colorNumberPieces +  " AND " + oppositeNumberPieces);
+        // System.out.println(colorNumberPieces +  " AND " + oppositeNumberPieces);
 
 
         if(color == TileState.NOIR){
@@ -28,7 +29,7 @@ public class EvaluationFunctions {
             oppositeNumberPieces*=24;
         }
 
-        System.out.println(colorNumberPieces +  " AND " + oppositeNumberPieces);
+        // System.out.println(colorNumberPieces +  " AND " + oppositeNumberPieces);
 
         return colorNumberPieces-oppositeNumberPieces;
     }

@@ -54,13 +54,13 @@ class Client {
                     String move = null;
 //                    move = console.readLine();
 
-                    Map<Tile, ArrayList<Position>> moves = alphaBeta.getNextMoveAB(board);
-                    Map.Entry<Tile, ArrayList<Position>> firstEntry  = moves.entrySet().iterator().next();
+                    Map<String, ArrayList<String>> moves = alphaBeta.getNextMoveAB(board);
+                    Map.Entry<String, ArrayList<String>> firstPieceBoardPosition  = moves.entrySet().iterator().next();
 //                    System.out.println(moves);// Get the first entry
-                    Tile firstTile = firstEntry.getKey(); // Get the first tile
-                    Position firstPosition = moves.get(firstTile).get(0); // Get the first position
-                    move = Helpers.getLetterValue(firstTile.getX()) + (firstTile.getY()+1) + " - "
-                            + Helpers.getLetterValue(firstPosition.getX()) + (firstPosition.getY()+1);
+                    // Tile firstTile = firstEntry.getKey(); // Get the first tile
+                    // Position firstPosition = moves.get(firstTile).get(0); // Get the first position
+                    move = firstPieceBoardPosition.getKey() + " - "
+                            + firstPieceBoardPosition.getValue().get(0);
 
                     System.out.println(move);
                     board.playMoveOnBoard(move);
@@ -111,13 +111,14 @@ class Client {
                     String move = null;
 //                    move = console.readLine();
 
-                    Map<Tile, ArrayList<Position>> moves = alphaBeta.getNextMoveAB(board);
-                    Map.Entry<Tile, ArrayList<Position>> firstEntry  = moves.entrySet().iterator().next();
+                    Map<String, ArrayList<String>> moves = alphaBeta.getNextMoveAB(board);
+                    Map.Entry<String, ArrayList<String>> firstPieceBoardPosition  = moves.entrySet().iterator().next();
 //                    System.out.println(moves);// Get the first entry
-                    Tile firstTile = firstEntry.getKey(); // Get the first tile
-                    Position firstPosition = moves.get(firstTile).get(0); // Get the first position
-                    move = Helpers.getLetterValue(firstTile.getX()) + (firstTile.getY()+1) + " - "
-                            + Helpers.getLetterValue(firstPosition.getX()) + (firstPosition.getY()+1);
+                    // Tile firstTile = board.findTileWithBoardPosition(firstPieceBoardPosition.getKey()); // Get the first tile
+                    // Position firstPosition = new Position(moves.get(firstPieceBoardPosition.getKey()).get(0)); // Get the first position
+
+                    move = firstPieceBoardPosition.getKey() + " - "
+                            + firstPieceBoardPosition.getValue().get(0);
 
                     System.out.println(move);
                     board.playMoveOnBoard(move);

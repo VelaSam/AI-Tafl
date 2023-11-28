@@ -12,33 +12,28 @@ import java.util.Map;
 
 public class AlphaBeta {
     int numExploredNodes;
-    private TileState playerColor;
-
-    public static final int depth = 2;
+    public static final int depth = 3;
 
     // Retourne la liste des coups possibles. Cette liste contient
     // plusieurs coups possibles si et seulement si plusieurs coups
     // ont le même score.
-    public Map<Tile, ArrayList<Position>> getNextMoveAB(Board board) {
-
-
-        playerColor = board.getMaxPlayer();
+    public Map<String, ArrayList<String>> getNextMoveAB(Board board) {
         numExploredNodes = 0;
 
-        Map<Tile, ArrayList<Position>> result = new HashMap<>();
+        Map<String, ArrayList<String>> result = new HashMap<>();
         double resultValue = Double.NEGATIVE_INFINITY;
 
         //get possible moves
-        Map<Tile, List<Position>> possibleMoves = board.getPossibleMoves();
+        Map<String, List<String>> possibleMoves = board.getPossibleMoves();
 
-        for (Map.Entry<Tile, List<Position>> entry : possibleMoves.entrySet()) {
-            Tile coloredPiece = entry.getKey();
-            List<Position> possibleMovesFromColoredPiece = entry.getValue();
+        for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
+            String coloredPieceBoardPosition = entry.getKey();
+            List<String> possibleMovesFromColoredPiece = entry.getValue();
 
-            ArrayList<Position> positionsToSend = new ArrayList<>();
+            ArrayList<String> positionsToSend = new ArrayList<>();
 
-            for (Position position : possibleMovesFromColoredPiece) {
-                Board boardWithNextMove = board.checkMove(coloredPiece, position, playerColor);
+            for (String position : possibleMovesFromColoredPiece) {
+                Board boardWithNextMove = board.checkMove(coloredPieceBoardPosition, position);
                 double value = minValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(), resultValue, Double.POSITIVE_INFINITY, depth);
                 if (value >= resultValue) {
                     if (value > resultValue) {
@@ -46,12 +41,12 @@ public class AlphaBeta {
                         positionsToSend.clear();
                     }
                     positionsToSend.add(position); // ???????????
-                    System.out.println(positionsToSend);
+                    // System.out.println(positionsToSend);
                     resultValue = value;
                 }
             }
             if (!positionsToSend.isEmpty()) {
-                result.put(coloredPiece, positionsToSend);
+                result.put(coloredPieceBoardPosition, positionsToSend);
             }
         }
         return result;
@@ -67,13 +62,13 @@ public class AlphaBeta {
 
         // Game is not done
         double value = Double.NEGATIVE_INFINITY;
-        Map<Tile, List<Position>> possibleMoves = positionActuelle.getPossibleMoves();
+        Map<String, List<String>> possibleMoves = positionActuelle.getPossibleMoves();
 
-        for (Map.Entry<Tile, List<Position>> entry : possibleMoves.entrySet()) {
-            List<Position> positions = entry.getValue();
+        for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
+            List<String> positions = entry.getValue();
 
-            for (Position position : positions) {
-                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position, playerColor);
+            for (String position : positions) {
+                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position);
                 double score = minValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(), Math.max(alpha, value), beta, depth - 1);
                 value = Math.max(value, score);
                 alpha = Math.max(alpha, value);
@@ -94,13 +89,13 @@ public class AlphaBeta {
         }
 
         double value = Double.POSITIVE_INFINITY;
-        Map<Tile, List<Position>> possibleMoves = positionActuelle.getPossibleMoves();
+        Map<String, List<String>> possibleMoves = positionActuelle.getPossibleMoves();
 
-        for (Map.Entry<Tile, List<Position>> entry : possibleMoves.entrySet()) {
-            List<Position> positions = entry.getValue();
+        for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
+            List<String> positions = entry.getValue();
 
-            for (Position position : positions) {
-                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position, playerColor);
+            for (String position : positions) {
+                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position);
                 double score = maxValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(),
                         Math.min(alpha, value), beta, depth - 1);
 
