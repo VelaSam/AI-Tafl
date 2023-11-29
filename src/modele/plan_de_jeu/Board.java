@@ -69,50 +69,6 @@ public class Board {
     }
 
     /**
-     * Plays a certain move on a copy of the board, not impacting the current board.
-     * 
-     * @param currentTileBoardPosition The board position (Ex: E2, G8) of the tile
-     *                                 that is being moved
-     * @param moveBoardPosition        The board position (Ex: E2, G8) of the move
-     *                                 that the currentTile executes
-     * @return The new board with the changed pieces
-     */
-    public Board checkMove(String currentTileBoardPosition, String moveBoardPosition) {
-        Board clonedBoard = this.clone();
-
-        // System.out.println(move.getBoardPosition());
-        // System.out.println(move.getX());
-        // System.out.println(move.getY());
-        // System.out.println(clonedBoard.tiles[move.getX()][move.getY()]);
-        // System.out.println(clonedBoard);
-
-        // clonedBoard.tiles[currentTile.getX()][currentTile.getY()].setState(TileState.EMPTY);
-        // clonedBoard.tiles[move.getX()][move.getY()].setState(color == TileState.ROUGE
-        // ?
-        // TileState.ROUGE : TileState.NOIR);
-
-        clonedBoard.playMoveOnBoard(currentTileBoardPosition + " - " + moveBoardPosition);
-
-        return clonedBoard;
-    }
-
-    /**
-     * Creates a new Board and assigns the current values to the copy
-     * 
-     * @return The copy of the current board
-     */
-    public Board clone() {
-        this.countCurrentPiecesOnBoard();
-        Board clone = new Board(this.tiles);
-        clone.maxPlayer = this.maxPlayer;
-        clone.maxPlayer = this.minPlayer;
-        clone.redPieces = this.redPieces;
-        clone.blackPieces = this.blackPieces;
-
-        return clone;
-    }
-
-    /**
      * The logic to create the tiles and populate the 2D tile array
      * 
      * @param boardValues An array of the starting tile states : empty, red, black
@@ -274,6 +230,7 @@ public class Board {
                     .getXCoordinateFromBoardPosition(lastMovePlayed.getFromBoardPosition())][Helpers
                             .getYCoordinateFromBoardPosition(lastMovePlayed.getFromBoardPosition())];
             killedTile.setState(lastMovePlayed.getFromTileState());
+            incrementColorPiece(lastMovePlayed.getFromTileState());
 
             lastMovePlayed = movesStack.pop();
         }
@@ -323,7 +280,6 @@ public class Board {
                     movesStack.add(new BeforeMoveState(nextDown.getState(), nextDown.getPosition().getBoardPosition()));
                     this.decrementColorPiece(nextDown.getState());
                     nextDown.setState(TileState.EMPTY);
-
                 }
             }
         }
@@ -336,7 +292,6 @@ public class Board {
                             .add(new BeforeMoveState(nextRight.getState(), nextRight.getPosition().getBoardPosition()));
                     this.decrementColorPiece(nextRight.getState());
                     nextRight.setState(TileState.EMPTY);
-
                 }
             }
 
@@ -359,6 +314,14 @@ public class Board {
             redPieces--;
         } else if (tileState == TileState.ROI_NOIR || tileState == TileState.NOIR) {
             blackPieces--;
+        }
+    }
+
+    private void incrementColorPiece(TileState tileState) {
+        if (tileState == TileState.ROUGE) {
+            redPieces++;
+        } else if (tileState == TileState.ROI_NOIR || tileState == TileState.NOIR) {
+            blackPieces++;
         }
     }
 
@@ -393,6 +356,43 @@ public class Board {
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public Tile getKingTile() {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                if (tiles[i][j].getState() == TileState.ROI_NOIR) {
+                    return tiles[i][j];
+                }
+            }
+        }
+        return null;
+    }
+
+    public int getLastMoveKillCount() {
+        int killCount = 0;
+        for (int i = movesStack.size() - 1; i <= movesStack.size() - 4; i--) {
+            if (movesStack.get(i).isKill()) {
+                killCount++;
+            } else {
+                break;
+            }
+        }
+        return killCount;
+    }
+
+    public Tile getLastMoveUpdatedTile() {
+        Tile lastTile = null;
+        for (int i = movesStack.size() - 1; i <= movesStack.size() - 4; i--) {
+            if (movesStack.get(i).isKill()) {
+                continue;
+            } else {
+                lastTile = findTileWithBoardPosition(movesStack.peek().getToBoardPosition());
+                break;
+            }
+        }
+
+        return lastTile;
     }
 
     public String toString() {
