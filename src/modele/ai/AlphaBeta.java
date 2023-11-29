@@ -1,8 +1,6 @@
 package modele.ai;
 
 import modele.plan_de_jeu.Board;
-import modele.plan_de_jeu.Position;
-import modele.plan_de_jeu.Tile;
 import modele.plan_de_jeu.TileState;
 
 import java.util.ArrayList;

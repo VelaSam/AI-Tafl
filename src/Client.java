@@ -1,15 +1,10 @@
 import modele.ai.AlphaBeta;
-import modele.helpers.Helpers;
 import modele.plan_de_jeu.Board;
-import modele.plan_de_jeu.Position;
-import modele.plan_de_jeu.Tile;
 import modele.plan_de_jeu.TileState;
 
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 
