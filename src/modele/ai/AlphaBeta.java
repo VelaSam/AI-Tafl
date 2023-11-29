@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class AlphaBeta {
     int numExploredNodes;
-    public static final int depth = 3;
+    public static final int depth = 4;
 
     // Retourne la liste des coups possibles. Cette liste contient
     // plusieurs coups possibles si et seulement si plusieurs coups
@@ -23,7 +23,7 @@ public class AlphaBeta {
         Map<String, ArrayList<String>> result = new HashMap<>();
         double resultValue = Double.NEGATIVE_INFINITY;
 
-        //get possible moves
+        // get possible moves
         Map<String, List<String>> possibleMoves = board.getPossibleMoves();
 
         for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
@@ -33,11 +33,18 @@ public class AlphaBeta {
             ArrayList<String> positionsToSend = new ArrayList<>();
 
             for (String position : possibleMovesFromColoredPiece) {
-                Board boardWithNextMove = board.checkMove(coloredPieceBoardPosition, position);
-                double value = minValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(), resultValue, Double.POSITIVE_INFINITY, depth);
+                board.playMoveOnBoard(coloredPieceBoardPosition + " - " + position);
+                // Board boardWithNextMove = board.checkMove(coloredPieceBoardPosition,
+                // position);
+                // double value = minValueAlphaBeta(boardWithNextMove,
+                // boardWithNextMove.getMinPlayer(), resultValue,
+                // Double.POSITIVE_INFINITY, depth);
+                double value = minValueAlphaBeta(board, board.getMinPlayer(), resultValue,
+                        Double.POSITIVE_INFINITY, depth);
+                board.undoLastMove();
                 if (value >= resultValue) {
                     if (value > resultValue) {
-                      // result.clear();
+                        // result.clear();
                         positionsToSend.clear();
                     }
                     positionsToSend.add(position); // ???????????
@@ -56,7 +63,7 @@ public class AlphaBeta {
         numExploredNodes++;
         int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur);
 
-        if(depth == 0){
+        if (depth == 0) {
             return positionActuelleEstFinale;
         }
 
@@ -68,8 +75,15 @@ public class AlphaBeta {
             List<String> positions = entry.getValue();
 
             for (String position : positions) {
-                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position);
-                double score = minValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(), Math.max(alpha, value), beta, depth - 1);
+                positionActuelle.playMoveOnBoard(entry.getKey() + " - " + position);
+                // Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(),
+                // position);
+                // double score = minValueAlphaBeta(boardWithNextMove,
+                // boardWithNextMove.getMinPlayer(), Math.max(alpha, value), beta, depth - 1);
+                double score = minValueAlphaBeta(positionActuelle, positionActuelle.getMinPlayer(),
+                        Math.max(alpha, value), beta, depth - 1);
+
+                positionActuelle.undoLastMove();
                 value = Math.max(value, score);
                 alpha = Math.max(alpha, value);
                 if (alpha >= beta)
@@ -84,7 +98,7 @@ public class AlphaBeta {
         numExploredNodes++;
         int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur);
 
-        if(depth == 0){
+        if (depth == 0) {
             return positionActuelleEstFinale;
         }
 
@@ -95,10 +109,15 @@ public class AlphaBeta {
             List<String> positions = entry.getValue();
 
             for (String position : positions) {
-                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position);
-                double score = maxValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(),
+                positionActuelle.playMoveOnBoard(entry.getKey() + " - " + position);
+                double score = maxValueAlphaBeta(positionActuelle, positionActuelle.getMinPlayer(),
                         Math.min(alpha, value), beta, depth - 1);
-
+                // Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(),
+                // position);
+                // double score = maxValueAlphaBeta(boardWithNextMove,
+                // boardWithNextMove.getMinPlayer(),
+                // Math.min(alpha, value), beta, depth - 1);
+                positionActuelle.undoLastMove();
                 value = Math.min(value, score);
                 beta = Math.min(beta, value);
                 if (beta <= alpha)

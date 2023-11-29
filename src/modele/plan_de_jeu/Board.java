@@ -17,6 +17,8 @@ public class Board {
     private TileState maxPlayer;
     private TileState minPlayer;
 
+    private Stack<BeforeMoveState> movesStack = new Stack<>();
+
     private int blackPieces;
     private int redPieces;
 
@@ -57,7 +59,6 @@ public class Board {
         return minPlayer;
     }
 
-
     public int getPlayerPiecesCounter(TileState tileState) {
         if (tileState == TileState.ROUGE) {
             return redPieces;
@@ -70,8 +71,10 @@ public class Board {
     /**
      * Plays a certain move on a copy of the board, not impacting the current board.
      * 
-     * @param currentTileBoardPosition The board position (Ex: E2, G8) of the tile that is being moved
-     * @param moveBoardPosition The board position (Ex: E2, G8) of the move that the currentTile executes
+     * @param currentTileBoardPosition The board position (Ex: E2, G8) of the tile
+     *                                 that is being moved
+     * @param moveBoardPosition        The board position (Ex: E2, G8) of the move
+     *                                 that the currentTile executes
      * @return The new board with the changed pieces
      */
     public Board checkMove(String currentTileBoardPosition, String moveBoardPosition) {
@@ -83,9 +86,9 @@ public class Board {
         // System.out.println(clonedBoard.tiles[move.getX()][move.getY()]);
         // System.out.println(clonedBoard);
 
-
         // clonedBoard.tiles[currentTile.getX()][currentTile.getY()].setState(TileState.EMPTY);
-        // clonedBoard.tiles[move.getX()][move.getY()].setState(color == TileState.ROUGE ?
+        // clonedBoard.tiles[move.getX()][move.getY()].setState(color == TileState.ROUGE
+        // ?
         // TileState.ROUGE : TileState.NOIR);
 
         clonedBoard.playMoveOnBoard(currentTileBoardPosition + " - " + moveBoardPosition);
@@ -112,7 +115,8 @@ public class Board {
     /**
      * The logic to create the tiles and populate the 2D tile array
      * 
-     * @param boardValues An array of the starting tile states : empty, red, black or king
+     * @param boardValues An array of the starting tile states : empty, red, black
+     *                    or king
      */
     public void initializeNewBoard(String[] boardValues) {
         this.tiles = new Tile[WIDTH][WIDTH];
@@ -126,25 +130,27 @@ public class Board {
     }
 
     /**
-     * Based on the current maxPlayer's color and the current board state, calculates all the
+     * Based on the current maxPlayer's color and the current board state,
+     * calculates all the
      * possible moves
      * 
-     * @return A Map that links each piece on board to an array of positions (possible moves)
+     * @return A Map that links each piece on board to an array of positions
+     *         (possible moves)
      */
     public Map<String, List<String>> getPossibleMoves() {
 
-        // optimisation: a place de recreer la map a chaque fois, juste updater map qui existe deja
+        // optimisation: a place de recreer la map a chaque fois, juste updater map qui
+        // existe deja
         // optimisation, envoyer la position a place de la tile
         Map<String, List<String>> positions = new HashMap<>();
 
         List<Tile> maxPlayerPieces;
 
         if (this.maxPlayer == TileState.NOIR) {
-            maxPlayerPieces =
-                    Arrays.stream(tiles).flatMap(Arrays::stream)
-                            .filter(tile -> tile.getState() == TileState.NOIR
-                                    || tile.getState() == TileState.ROI_NOIR)
-                            .collect(Collectors.toList());
+            maxPlayerPieces = Arrays.stream(tiles).flatMap(Arrays::stream)
+                    .filter(tile -> tile.getState() == TileState.NOIR
+                            || tile.getState() == TileState.ROI_NOIR)
+                    .collect(Collectors.toList());
         } else {
             maxPlayerPieces = Arrays.stream(tiles).flatMap(Arrays::stream)
                     .filter(tile -> tile.getState() == TileState.ROUGE)
@@ -156,9 +162,12 @@ public class Board {
         return positions;
     }
 
-    // To parallelize the code, you can use Java's ExecutorService and the submit method
-    // to create and run tasks concurrently. You can divide the work into separate tasks for
-    // each Tile in the filteredTiles list. Here's a parallelized version of your code:
+    // To parallelize the code, you can use Java's ExecutorService and the submit
+    // method
+    // to create and run tasks concurrently. You can divide the work into separate
+    // tasks for
+    // each Tile in the filteredTiles list. Here's a parallelized version of your
+    // code:
     private void skimThroughBoard(Map<String, List<String>> positions, List<Tile> filteredTiles) {
         for (Tile tile : filteredTiles) {
             String currentTileBoardPosition = tile.getPosition().getBoardPosition();
@@ -197,8 +206,8 @@ public class Board {
         return tile.getState() != TileState.EMPTY || tile.isMarkedX() && !kingIsMoving;
     }
 
-
-    // Va recevoir un move tel que "A5 - B5@" et va ensuite modifier le board en consequence
+    // Va recevoir un move tel que "A5 - B5@" et va ensuite modifier le board en
+    // consequence
     public void playMoveOnBoard(String move) {
 
         iterations++;
@@ -209,13 +218,11 @@ public class Board {
         String beginningSpace = splitMove[0].trim();
         String destinationSpace = splitMove[1].trim();
 
-        Tile beginningTile =
-                tiles[Helpers.getNumberValue(String.valueOf(beginningSpace.charAt(0)))][Integer
-                        .parseInt(beginningSpace.substring(1)) - 1];
+        Tile beginningTile = tiles[Helpers.getNumberValue(String.valueOf(beginningSpace.charAt(0)))][Integer
+                .parseInt(beginningSpace.substring(1)) - 1];
 
-        Tile destinationTile =
-                tiles[Helpers.getNumberValue(String.valueOf(destinationSpace.charAt(0)))][Integer
-                        .parseInt(destinationSpace.substring(1)) - 1];
+        Tile destinationTile = tiles[Helpers.getNumberValue(String.valueOf(destinationSpace.charAt(0)))][Integer
+                .parseInt(destinationSpace.substring(1)) - 1];
 
         // If both have different X and Y, the move is diagonal, which is illegal.
         if (beginningTile.getX() != destinationTile.getX()
@@ -225,7 +232,6 @@ public class Board {
                     + " may not go to " + Helpers.getLetterValue(destinationTile.getX())
                     + (destinationTile.getY() + 1));
         }
-
 
         TileState moverState = beginningTile.getState();
 
@@ -248,26 +254,40 @@ public class Board {
                     + beginningTile.getX() + "][" + beginningTile.getY() + "]  ");
         }
 
+        movesStack.add(new BeforeMoveState(beginningTile.getState(), destinationTile.getState(),
+                beginningTile.getPosition().getBoardPosition(), destinationTile.getPosition().getBoardPosition()));
+
         beginningTile.setState(TileState.EMPTY);
         destinationTile.setState(moverState);
         checkForPieceKill(destinationTile);
     }
 
+    public void undoLastMove() {
+        if (movesStack.size() == 0) {
+            throw new IllegalArgumentException("There are no moves to undo");
+        }
 
-    public String toString() {
-        StringBuilder boardStr = new StringBuilder("");
-        if (iterations == 0) {
-            boardStr.append("Game start \n");
-        } else {
-            boardStr.append("Move number: ").append(iterations).append(" \n");
+        BeforeMoveState lastMovePlayed = movesStack.pop();
+        while (lastMovePlayed.isKill()) {
+            // reverse kill
+            Tile killedTile = tiles[Helpers
+                    .getXCoordinateFromBoardPosition(lastMovePlayed.getFromBoardPosition())][Helpers
+                            .getYCoordinateFromBoardPosition(lastMovePlayed.getFromBoardPosition())];
+            killedTile.setState(lastMovePlayed.getFromTileState());
+
+            lastMovePlayed = movesStack.pop();
         }
-        for (int i = WIDTH - 1; i >= 0; i--) {
-            for (int j = 0; j < WIDTH; j++) {
-                boardStr.append(tiles[j][i].singleCharacterStateString()).append(" ");
-            }
-            boardStr.append("\n");
-        }
-        return boardStr.toString();
+
+        Tile beginningTile = tiles[Helpers
+                .getXCoordinateFromBoardPosition(lastMovePlayed.getFromBoardPosition())][Helpers
+                        .getYCoordinateFromBoardPosition(lastMovePlayed.getFromBoardPosition())];
+
+        Tile destinationTile = tiles[Helpers
+                .getXCoordinateFromBoardPosition(lastMovePlayed.getToBoardPosition())][Helpers
+                        .getYCoordinateFromBoardPosition(lastMovePlayed.getToBoardPosition())];
+
+        beginningTile.setState(lastMovePlayed.getFromTileState());
+        destinationTile.setState(lastMovePlayed.getToTileState());
     }
 
     private void checkForPieceKill(Tile movedPiece) {
@@ -280,7 +300,8 @@ public class Board {
         nextRight = movedPiece.getNextRight(tiles);
         nextLeft = movedPiece.getNextLeft(tiles);
 
-        // Cette section check si la case a coter est de couleur opposee ET que la case APRES celle
+        // Cette section check si la case a coter est de couleur opposee ET que la case
+        // APRES celle
         // la est de la meme couleur que movedPiece
         // si oui, KILL LA PIECE AONDOAWIDAOWIDN
         if (nextUp != null && movedPiece.isOppositeColorOf(nextUp)) {
@@ -288,8 +309,9 @@ public class Board {
             if (nextNextUp != null
                     && (nextUp.isOppositeColorOf(nextNextUp) || nextNextUp.isMarkedX())) {
                 if (nextUp.getState() != TileState.ROI_NOIR) {
-                    nextUp.setState(TileState.EMPTY);
+                    movesStack.add(new BeforeMoveState(nextUp.getState(), nextUp.getPosition().getBoardPosition()));
                     this.decrementColorPiece(nextUp.getState());
+                    nextUp.setState(TileState.EMPTY);
                 }
             }
         }
@@ -298,8 +320,9 @@ public class Board {
             if (nextNextDown != null
                     && (nextDown.isOppositeColorOf(nextNextDown) || nextNextDown.isMarkedX())) {
                 if (nextDown.getState() != TileState.ROI_NOIR) {
-                    nextDown.setState(TileState.EMPTY);
+                    movesStack.add(new BeforeMoveState(nextDown.getState(), nextDown.getPosition().getBoardPosition()));
                     this.decrementColorPiece(nextDown.getState());
+                    nextDown.setState(TileState.EMPTY);
 
                 }
             }
@@ -309,8 +332,10 @@ public class Board {
             if (nextNextRight != null
                     && (nextRight.isOppositeColorOf(nextNextRight) || nextNextRight.isMarkedX())) {
                 if (nextRight.getState() != TileState.ROI_NOIR) {
-                    nextRight.setState(TileState.EMPTY);
+                    movesStack
+                            .add(new BeforeMoveState(nextRight.getState(), nextRight.getPosition().getBoardPosition()));
                     this.decrementColorPiece(nextRight.getState());
+                    nextRight.setState(TileState.EMPTY);
 
                 }
             }
@@ -321,8 +346,9 @@ public class Board {
             if (nextNextLeft != null
                     && (nextLeft.isOppositeColorOf(nextNextLeft) || nextNextLeft.isMarkedX())) {
                 if (nextLeft.getState() != TileState.ROI_NOIR) {
-                    nextLeft.setState(TileState.EMPTY);
+                    movesStack.add(new BeforeMoveState(nextLeft.getState(), nextLeft.getPosition().getBoardPosition()));
                     this.decrementColorPiece(nextLeft.getState());
+                    nextLeft.setState(TileState.EMPTY);
                 }
             }
         }
@@ -367,5 +393,21 @@ public class Board {
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public String toString() {
+        StringBuilder boardStr = new StringBuilder("");
+        if (iterations == 0) {
+            boardStr.append("Game start \n");
+        } else {
+            boardStr.append("Move number: ").append(iterations).append(" \n");
+        }
+        for (int i = WIDTH - 1; i >= 0; i--) {
+            for (int j = 0; j < WIDTH; j++) {
+                boardStr.append(tiles[j][i].singleCharacterStateString()).append(" ");
+            }
+            boardStr.append("\n");
+        }
+        return boardStr.toString();
     }
 }
