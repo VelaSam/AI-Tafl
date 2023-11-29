@@ -86,18 +86,16 @@ public class Board {
     }
 
     /**
-     * Based on the current maxPlayer's color and the current board state,
-     * calculates all the
-     * possible moves
+     * Sert à trouver les positions possibles pour chaque pièce du joueur qui a le
+     * tour.
      * 
-     * @return A Map that links each piece on board to an array of positions
-     *         (possible moves)
+     * @return Une map qui contient les positions possibles pour chaque pièce du
+     *         joueur.
      */
     public Map<String, List<String>> getPossibleMoves() {
 
         // optimisation: a place de recreer la map a chaque fois, juste updater map qui
         // existe deja
-        // optimisation, envoyer la position a place de la tile
         Map<String, List<String>> positions = new HashMap<>();
 
         List<Tile> maxPlayerPieces;
@@ -118,13 +116,22 @@ public class Board {
         return positions;
     }
 
-    // To parallelize the code, you can use Java's ExecutorService and the submit
-    // method
-    // to create and run tasks concurrently. You can divide the work into separate
-    // tasks for
-    // each Tile in the filteredTiles list. Here's a parallelized version of your
-    // code:
+    /**
+     * Pour chaque pièce fournie en paramètre, explorer le plateau pour trouver les
+     * emplacements vides et les ajoutés à la map de positions.
+     * 
+     * @param positions     La map qui contiendra les positions possibles pour les
+     *                      pièces fournies.
+     * @param filteredTiles Les pièces pour lesquelles on veut trouver les positions
+     *                      possibles.
+     */
     private void skimThroughBoard(Map<String, List<String>> positions, List<Tile> filteredTiles) {
+        // To parallelize the code, you can use Java's ExecutorService and the submit
+        // method
+        // to create and run tasks concurrently. You can divide the work into separate
+        // tasks for
+        // each Tile in the filteredTiles list. Here's a parallelized version of your
+        // code:
         for (Tile tile : filteredTiles) {
             String currentTileBoardPosition = tile.getPosition().getBoardPosition();
 
@@ -162,8 +169,11 @@ public class Board {
         return tile.getState() != TileState.EMPTY || tile.isMarkedX() && !kingIsMoving;
     }
 
-    // Va recevoir un move tel que "A5 - B5@" et va ensuite modifier le board en
-    // consequence
+    /**
+     * Sert à jouer un coup sur le plateau.
+     * 
+     * @param move Le coup à jouer.
+     */
     public void playMoveOnBoard(String move) {
 
         iterations++;
@@ -218,6 +228,10 @@ public class Board {
         checkForPieceKill(destinationTile);
     }
 
+    /**
+     * Permet de revenir en arriere d'un coup, incluant les éléminations de pions
+     * causées par le dernier coup.
+     */
     public void undoLastMove() {
         if (movesStack.size() == 0) {
             throw new IllegalArgumentException("There are no moves to undo");
@@ -247,6 +261,12 @@ public class Board {
         destinationTile.setState(lastMovePlayed.getToTileState());
     }
 
+    /**
+     * Regarde si la pièce fournie en paramètre peut tuer une ou des pièces
+     * ennemies.
+     * 
+     * @param movedPiece La pièce qui vient de bouger.
+     */
     private void checkForPieceKill(Tile movedPiece) {
         // will kill a piece if the enemy piece is between two pieces
 
@@ -309,6 +329,12 @@ public class Board {
         }
     }
 
+    /**
+     * Sert à décrementer le nombre de pièces restantes sur le plateau de la couleur
+     * fournie en paramètre.
+     * 
+     * @param tileState La couleur de la pièce à décrementer.
+     */
     private void decrementColorPiece(TileState tileState) {
         if (tileState == TileState.ROUGE) {
             redPieces--;
@@ -317,6 +343,12 @@ public class Board {
         }
     }
 
+    /**
+     * Sert à incrémenter le nombre de pièces restantes sur le plateau de la couleur
+     * fournie en paramètre.
+     * 
+     * @param tileState La couleur de la pièce à incrémenter.
+     */
     private void incrementColorPiece(TileState tileState) {
         if (tileState == TileState.ROUGE) {
             redPieces++;
@@ -325,6 +357,10 @@ public class Board {
         }
     }
 
+    /**
+     * Sert à compter le nombre de pièces restantes de chaque couleur sur le
+     * plateau.
+     */
     private void countCurrentPiecesOnBoard() {
         this.redPieces = 0;
         this.blackPieces = 0;
@@ -341,6 +377,12 @@ public class Board {
         }
     }
 
+    /**
+     * Sert à trouver la tuile qui a la position fournie en paramètre.
+     * 
+     * @param boardPosition La position de la tuile à trouver.
+     * @return La tuile qui a la position fournie en paramètre.
+     */
     public Tile findTileWithBoardPosition(String boardPosition) {
         return this.tiles[Helpers.getXCoordinateFromBoardPosition(boardPosition)][Helpers
                 .getYCoordinateFromBoardPosition(boardPosition)];
@@ -358,6 +400,11 @@ public class Board {
         return tiles;
     }
 
+    /**
+     * Sert à trouver la tuile qui contient le roi.
+     * 
+     * @return La tuile qui contient le roi noir.
+     */
     public Tile getKingTile() {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < WIDTH; j++) {
@@ -369,6 +416,11 @@ public class Board {
         return null;
     }
 
+    /**
+     * Sert à trouver le nombre de pièces tuées lors du dernier coup.
+     * 
+     * @return Le nombre de pièces tuées lors du dernier coup.
+     */
     public int getLastMoveKillCount() {
         int killCount = 0;
         for (int i = movesStack.size() - 1; i <= movesStack.size() - 4; i--) {
@@ -381,6 +433,11 @@ public class Board {
         return killCount;
     }
 
+    /**
+     * Sert à trouver la tuile où s'est déplacée la pièce lors du dernier coup.
+     * 
+     * @return La tuile où s'est déplacée la pièce lors du dernier coup.
+     */
     public Tile getLastMoveUpdatedTile() {
         Tile lastTile = null;
         for (int i = movesStack.size() - 1; i <= movesStack.size() - 4; i--) {

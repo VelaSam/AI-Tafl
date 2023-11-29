@@ -12,6 +12,7 @@ public class EvaluationFunctions {
     private static int POSSIBLE_KING_DEATH = 25000;
     private static int POSSIBLE_PIECE_DEATH = 10000;
     private static int NORMAL_MOVE = 100;
+    private static int DEPTH_CORRECTION = 1000;
 
     /**
      * Évalue la situation du joueur passé en paramètre
@@ -20,13 +21,13 @@ public class EvaluationFunctions {
      * @param color La couleur du joueur
      * @return La valeur de l'évaluation
      */
-    public static int evaluate(Board board, TileState color) {
-
+    public static int evaluate(Board board, TileState color, int depth) {
+        int correctionDepth = depth * DEPTH_CORRECTION; 
         switch (color) {
             case ROUGE:
-                return evaluateForRed(board);
+                return evaluateForRed(board) + correctionDepth;
             case NOIR:
-                return evaluateForBlack(board);
+                return evaluateForBlack(board) + correctionDepth;
             default:
                 break;
         }

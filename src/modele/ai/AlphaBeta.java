@@ -59,7 +59,7 @@ public class AlphaBeta {
 
     public double maxValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta, int depth) {
         numExploredNodes++;
-        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur);
+        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
 
         if (depth == 0) {
             return positionActuelleEstFinale;
@@ -94,7 +94,7 @@ public class AlphaBeta {
 
     public double minValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta, int depth) {
         numExploredNodes++;
-        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur);
+        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
 
         if (depth == 0) {
             return positionActuelleEstFinale;
