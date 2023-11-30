@@ -22,7 +22,7 @@ public class EvaluationFunctions {
      * @return La valeur de l'évaluation
      */
     public static int evaluate(Board board, TileState color, int depth) {
-        int correctionDepth = depth * DEPTH_CORRECTION; 
+        int correctionDepth = depth * DEPTH_CORRECTION;
         switch (color) {
             case ROUGE:
                 return evaluateForRed(board) + correctionDepth;
@@ -60,7 +60,7 @@ public class EvaluationFunctions {
     }
 
     /**
-     * Évalue la situation du joueur rouge
+     * Évalue si le minPlayer est le joueur rouge
      * 
      * @param board Le plateau de jeu
      * @return La valeur de l'évaluation
@@ -75,29 +75,30 @@ public class EvaluationFunctions {
          * 5. Si les les possiblesMoves sont vides, alors la partie est finie (nulle)
          */
 
-        // Case 1
-        if (kingInCorner(board)) {
-            return -GAME_OVER;
-        }
-
-        // Case 2
-        if (board.getPlayerPiecesCounter(TileState.ROUGE) == 0) {
-            return -GAME_OVER;
-        }
 
         // Case 3
         int redPiecesAroundKingCount = redPiecesAroundKingCount(board);
         if (redPiecesAroundKingCount == 4) {
-            return GAME_OVER;
+            return -GAME_OVER;
         }
 
         // Case 4
         if (board.getPlayerPiecesCounter(TileState.NOIR) == 0) {
+            return -GAME_OVER;
+        }
+
+        // Case 1
+        if (kingInCorner(board)) {
+            return GAME_OVER;
+        }
+
+        // Case 2
+        if (board.getPlayerPiecesCounter(TileState.ROUGE) == 0) {
             return GAME_OVER;
         }
 
         // Case 5
-        if (board.getPossibleMoves().isEmpty()) {
+        if (board.getPossibleMoves(TileState.ROUGE).isEmpty()) {
             return GAME_OVER_DRAW;
         }
 
@@ -110,24 +111,26 @@ public class EvaluationFunctions {
          * 3. Si le move fait un ou plusieurs kills, alors le move est bon +
          */
 
-        // Case 1
-        if (isTileInDanger(board.getLastMoveUpdatedTile(), board)) {
-            return -POSSIBLE_PIECE_DEATH;
-        }
 
         // Case 2
         if (redPiecesAroundKingCount > 0) {
-            return POSSIBLE_KING_DEATH * redPiecesAroundKingCount;
+            return (-POSSIBLE_KING_DEATH) * redPiecesAroundKingCount;
         }
 
         // Case 3
         int lastMoveKillCount = board.getLastMoveKillCount();
         if (lastMoveKillCount > 0) {
-            return KILL * board.getLastMoveKillCount();
+            return (-KILL) * board.getLastMoveKillCount();
+        }
+
+        // Case 1
+        Tile lastMovedTile = board.getLastMoveUpdatedTile();
+        if (lastMovedTile != null && isTileInDanger(lastMovedTile, board)) {
+            return POSSIBLE_PIECE_DEATH;
         }
 
         // Comportement par défaut quand rien de spécial ne se passe
-        return NORMAL_MOVE;
+        return -NORMAL_MOVE;
     }
 
     /**
@@ -212,16 +215,16 @@ public class EvaluationFunctions {
         nextRight = tile.getNextRight(tiles);
         nextLeft = tile.getNextLeft(tiles);
 
-        if (nextUp != null && nextUp.isOppositeColorOf(tile)) {
+        if (nextUp != null && tile.isOppositeColorOf(nextUp)) {
             return true;
         }
-        if (nextDown != null && nextDown.isOppositeColorOf(tile)) {
+        if (nextDown != null && tile.isOppositeColorOf(nextDown)) {
             return true;
         }
-        if (nextRight != null && nextRight.isOppositeColorOf(tile)) {
+        if (nextRight != null && tile.isOppositeColorOf(nextRight)) {
             return true;
         }
-        if (nextLeft != null && nextLeft.isOppositeColorOf(tile)) {
+        if (nextLeft != null && tile.isOppositeColorOf(nextLeft)) {
             return true;
         }
 

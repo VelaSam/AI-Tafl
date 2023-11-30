@@ -43,7 +43,7 @@ class Client {
                     board = new Board(boardValues, TileState.ROUGE);
 //                    System.out.println(board);
 
-                    System.out.println(board.getPossibleMoves());
+                    System.out.println(board.getPossibleMoves(board.getMaxPlayer()));
 
                     System.out.println("Nouvelle partie! Vous jouer rouge, entrez votre premier coup : ");
                     String move = null;
@@ -101,7 +101,7 @@ class Client {
                     board.playMoveOnBoard(s);
 
 
-                    System.out.println(board.getPossibleMoves());
+                    // System.out.println(board.getPossibleMoves());
                     System.out.println("Entrez votre coup : ");
                     String move = null;
 //                    move = console.readLine();

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class AlphaBeta {
     int numExploredNodes;
-    public static final int depth = 4;
+    public static final int depth = 3;
 
     // Retourne la liste des coups possibles. Cette liste contient
     // plusieurs coups possibles si et seulement si plusieurs coups
@@ -22,7 +22,7 @@ public class AlphaBeta {
         double resultValue = Double.NEGATIVE_INFINITY;
 
         // get possible moves
-        Map<String, List<String>> possibleMoves = board.getPossibleMoves();
+        Map<String, List<String>> possibleMoves = board.getPossibleMoves(board.getMaxPlayer());
 
         for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
             String coloredPieceBoardPosition = entry.getKey();
@@ -48,6 +48,7 @@ public class AlphaBeta {
                     positionsToSend.add(position); // ???????????
                     // System.out.println(positionsToSend);
                     resultValue = value;
+                    System.out.println("resultValue: " + resultValue);
                 }
             }
             if (!positionsToSend.isEmpty()) {
@@ -67,7 +68,7 @@ public class AlphaBeta {
 
         // Game is not done
         double value = Double.NEGATIVE_INFINITY;
-        Map<String, List<String>> possibleMoves = positionActuelle.getPossibleMoves();
+        Map<String, List<String>> possibleMoves = positionActuelle.getPossibleMoves(positionActuelle.getMaxPlayer());
 
         for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
             List<String> positions = entry.getValue();
@@ -88,7 +89,7 @@ public class AlphaBeta {
                     return value;
             }
         }
-
+        // System.out.println("maxValueAlphaBeta for depth " + depth + ": " + value);
         return value;
     }
 
@@ -101,14 +102,14 @@ public class AlphaBeta {
         }
 
         double value = Double.POSITIVE_INFINITY;
-        Map<String, List<String>> possibleMoves = positionActuelle.getPossibleMoves();
+        Map<String, List<String>> possibleMoves = positionActuelle.getPossibleMoves(joueur);
 
         for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
             List<String> positions = entry.getValue();
 
             for (String position : positions) {
                 positionActuelle.playMoveOnBoard(entry.getKey() + " - " + position);
-                double score = maxValueAlphaBeta(positionActuelle, positionActuelle.getMinPlayer(),
+                double score = maxValueAlphaBeta(positionActuelle, positionActuelle.getMaxPlayer(),
                         Math.min(alpha, value), beta, depth - 1);
                 // Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(),
                 // position);
@@ -122,6 +123,7 @@ public class AlphaBeta {
                     return value;
             }
         }
+        // System.out.println("minValueAlphaBeta for depth " + depth + ": " + value);
         return value;
     }
 

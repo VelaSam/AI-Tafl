@@ -37,20 +37,6 @@ public class Board {
         this.countCurrentPiecesOnBoard();
     }
 
-    /**
-     * Constructor used by the method to copy the board, hence why it is private
-     * 
-     * @param tiles A 2D array of the tiles
-     */
-    private Board(Tile[][] tiles) {
-        this.tiles = new Tile[WIDTH][WIDTH];
-        for (int j = WIDTH - 1; j >= 0; j--) {
-            for (int i = 0; i < WIDTH; i++) {
-                this.tiles[i][j] = new Tile(new Position(i, j), tiles[i][j].getState());
-            }
-        }
-    }
-
     public TileState getMaxPlayer() {
         return maxPlayer;
     }
@@ -92,26 +78,26 @@ public class Board {
      * @return Une map qui contient les positions possibles pour chaque pièce du
      *         joueur.
      */
-    public Map<String, List<String>> getPossibleMoves() {
+    public Map<String, List<String>> getPossibleMoves(TileState color) {
 
         // optimisation: a place de recreer la map a chaque fois, juste updater map qui
         // existe deja
         Map<String, List<String>> positions = new HashMap<>();
 
-        List<Tile> maxPlayerPieces;
+        List<Tile> playerPieces;
 
-        if (this.maxPlayer == TileState.NOIR) {
-            maxPlayerPieces = Arrays.stream(tiles).flatMap(Arrays::stream)
+        if (color == TileState.NOIR) {
+            playerPieces = Arrays.stream(tiles).flatMap(Arrays::stream)
                     .filter(tile -> tile.getState() == TileState.NOIR
                             || tile.getState() == TileState.ROI_NOIR)
                     .collect(Collectors.toList());
         } else {
-            maxPlayerPieces = Arrays.stream(tiles).flatMap(Arrays::stream)
+            playerPieces = Arrays.stream(tiles).flatMap(Arrays::stream)
                     .filter(tile -> tile.getState() == TileState.ROUGE)
                     .collect(Collectors.toList());
         }
 
-        skimThroughBoard(positions, maxPlayerPieces);
+        skimThroughBoard(positions, playerPieces);
 
         return positions;
     }
@@ -416,14 +402,32 @@ public class Board {
         return null;
     }
 
+    public BeforeMoveState getSecondLastMove() {
+        for (int i = movesStack.size() - 1; i >= 0; i--) {
+            BeforeMoveState currentMove = movesStack.get(i);
+            if (currentMove.isKill()) {
+                continue;
+            }
+            for (int j = i - 1; j >= 0; j--) {
+                currentMove = movesStack.get(j);
+                if (currentMove.isKill()) {
+                    continue;
+                }
+                return currentMove;
+            }
+        }
+        return null;
+    }
+
     /**
      * Sert à trouver le nombre de pièces tuées lors du dernier coup.
      * 
      * @return Le nombre de pièces tuées lors du dernier coup.
      */
     public int getLastMoveKillCount() {
+        BeforeMoveState secondLastMove = getSecondLastMove();
         int killCount = 0;
-        for (int i = movesStack.size() - 1; i <= movesStack.size() - 4; i--) {
+        for (int i = movesStack.indexOf(secondLastMove); i < movesStack.size(); i++) {
             if (movesStack.get(i).isKill()) {
                 killCount++;
             } else {
@@ -439,15 +443,16 @@ public class Board {
      * @return La tuile où s'est déplacée la pièce lors du dernier coup.
      */
     public Tile getLastMoveUpdatedTile() {
-        Tile lastTile = null;
-        for (int i = movesStack.size() - 1; i <= movesStack.size() - 4; i--) {
-            if (movesStack.get(i).isKill()) {
-                continue;
-            } else {
-                lastTile = findTileWithBoardPosition(movesStack.peek().getToBoardPosition());
-                break;
-            }
-        }
+        Tile lastTile = findTileWithBoardPosition(getSecondLastMove().getToBoardPosition());
+        // for (int i = movesStack.size() - 1; i >= movesStack.size() - 4 && i >= 0;
+        // i--) {
+        // if (movesStack.get(i).isKill()) {
+        // continue;
+        // } else {
+        // lastTile =
+        // break;
+        // }
+        // }
 
         return lastTile;
     }
