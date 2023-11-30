@@ -40,19 +40,7 @@ public class Tile {
         if(this.state == TileState.ROUGE){
             return otherTile.state == TileState.ROI_NOIR || otherTile.state == TileState.NOIR;
         } else {
-            throw new IllegalArgumentException("Cant find opposite color of : " + this.state);
-        }
-    }
-
-    public boolean isOppositeColorOfTileState(TileState otherTileState){
-
-        if(this.state == TileState.NOIR || this.state == TileState.ROI_NOIR){
-            return otherTileState == TileState.ROUGE;
-        }
-        if(this.state == TileState.ROUGE){
-            return otherTileState == TileState.ROI_NOIR || otherTileState == TileState.NOIR;
-        } else {
-            throw new IllegalArgumentException("Cant find opposite color of : " + this.state);
+            return false;
         }
     }
 
