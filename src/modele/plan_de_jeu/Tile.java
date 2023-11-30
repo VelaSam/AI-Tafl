@@ -39,9 +39,8 @@ public class Tile {
         }
         if(this.state == TileState.ROUGE){
             return otherTile.state == TileState.ROI_NOIR || otherTile.state == TileState.NOIR;
-        } else {
-            throw new IllegalArgumentException("Cant find opposite color of : " + this.state);
         }
+        return false;
     }
 
     public boolean isOppositeColorOfTileState(TileState otherTileState){

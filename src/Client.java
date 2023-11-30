@@ -15,6 +15,7 @@ class Client {
         BufferedInputStream input;
         BufferedOutputStream output;
         Board board = null; // Board vide.
+        Map.Entry<String, String> bestMove;
 
         AlphaBeta alphaBeta = new AlphaBeta();
 
@@ -49,13 +50,14 @@ class Client {
                     String move = null;
 //                    move = console.readLine();
 
-                    Map<String, ArrayList<String>> moves = alphaBeta.getNextMoveAB(board);
-                    Map.Entry<String, ArrayList<String>> firstPieceBoardPosition  = moves.entrySet().iterator().next();
+//                    Map<String, ArrayList<String>> moves = alphaBeta.getNextMoveAB(board);
+//                    Map.Entry<String, ArrayList<String>> firstPieceBoardPosition  = moves.entrySet().iterator().next();
 //                    System.out.println(moves);// Get the first entry
                     // Tile firstTile = firstEntry.getKey(); // Get the first tile
                     // Position firstPosition = moves.get(firstTile).get(0); // Get the first position
-                    move = firstPieceBoardPosition.getKey() + " - "
-                            + firstPieceBoardPosition.getValue().get(0);
+                    bestMove = AlphaBeta.getBestMove(board);
+                    move = bestMove.getKey() + " - "
+                            + bestMove.getValue();
 
                     System.out.println(move);
                     board.playMoveOnBoard(move);
@@ -106,14 +108,15 @@ class Client {
                     String move = null;
 //                    move = console.readLine();
 
-                    Map<String, ArrayList<String>> moves = alphaBeta.getNextMoveAB(board);
-                    Map.Entry<String, ArrayList<String>> firstPieceBoardPosition  = moves.entrySet().iterator().next();
+//                    Map<String, ArrayList<String>> moves = alphaBeta.getNextMoveAB(board);
+//                    Map.Entry<String, ArrayList<String>> firstPieceBoardPosition  = moves.entrySet().iterator().next();
 //                    System.out.println(moves);// Get the first entry
                     // Tile firstTile = board.findTileWithBoardPosition(firstPieceBoardPosition.getKey()); // Get the first tile
                     // Position firstPosition = new Position(moves.get(firstPieceBoardPosition.getKey()).get(0)); // Get the first position
 
-                    move = firstPieceBoardPosition.getKey() + " - "
-                            + firstPieceBoardPosition.getValue().get(0);
+                    bestMove = AlphaBeta.getBestMove(board);
+                    move = bestMove.getKey() + " - "
+                            + bestMove.getValue();
 
                     System.out.println(move);
                     board.playMoveOnBoard(move);

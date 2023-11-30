@@ -428,6 +428,10 @@ public class Board {
         BeforeMoveState secondLastMove = getSecondLastMove();
         int killCount = 0;
         for (int i = movesStack.indexOf(secondLastMove); i < movesStack.size(); i++) {
+            if (i == -1) {
+                continue;
+            }
+
             if (movesStack.get(i).isKill()) {
                 killCount++;
             } else {
@@ -443,6 +447,10 @@ public class Board {
      * @return La tuile où s'est déplacée la pièce lors du dernier coup.
      */
     public Tile getLastMoveUpdatedTile() {
+        if (getSecondLastMove() == null) {
+            return null;
+        }
+
         Tile lastTile = findTileWithBoardPosition(getSecondLastMove().getToBoardPosition());
         // for (int i = movesStack.size() - 1; i >= movesStack.size() - 4 && i >= 0;
         // i--) {
