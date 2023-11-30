@@ -74,32 +74,32 @@ public class EvaluationFunctions {
          * 4. Si tous les pions noirs sont capturés, alors la partie est finie +++
          * 5. Si les les possiblesMoves sont vides, alors la partie est finie (nulle)
          */
-
+        int value = 0;
 
         // Case 3
         int redPiecesAroundKingCount = redPiecesAroundKingCount(board);
         if (redPiecesAroundKingCount == 4) {
-            return -GAME_OVER;
+            return board.getMaxPlayer() == TileState.ROUGE ? GAME_OVER: -GAME_OVER;
         }
 
         // Case 4
         if (board.getPlayerPiecesCounter(TileState.NOIR) == 0) {
-            return -GAME_OVER;
+            return board.getMaxPlayer() == TileState.ROUGE ? GAME_OVER : -GAME_OVER;
         }
 
         // Case 1
         if (kingInCorner(board)) {
-            return GAME_OVER;
+            return board.getMaxPlayer() == TileState.ROUGE ? -GAME_OVER : GAME_OVER;
         }
 
         // Case 2
         if (board.getPlayerPiecesCounter(TileState.ROUGE) == 0) {
-            return GAME_OVER;
+            return board.getMaxPlayer() == TileState.ROUGE ? -GAME_OVER : GAME_OVER;
         }
 
         // Case 5
         if (board.getPossibleMoves(TileState.ROUGE).isEmpty()) {
-            return GAME_OVER_DRAW;
+            return board.getMaxPlayer() == TileState.ROUGE ? -GAME_OVER_DRAW : GAME_OVER_DRAW;
         }
 
         /**
@@ -114,23 +114,23 @@ public class EvaluationFunctions {
 
         // Case 2
         if (redPiecesAroundKingCount > 0) {
-            return (-POSSIBLE_KING_DEATH) * redPiecesAroundKingCount;
+            value = (POSSIBLE_KING_DEATH) * redPiecesAroundKingCount;
         }
 
         // Case 3
         int lastMoveKillCount = board.getLastMoveKillCount();
         if (lastMoveKillCount > 0) {
-            return (-KILL) * board.getLastMoveKillCount();
+            value = (KILL) * board.getLastMoveKillCount();
         }
 
         // Case 1
         Tile lastMovedTile = board.getLastMoveUpdatedTile();
         if (lastMovedTile != null && isTileInDanger(lastMovedTile, board)) {
-            return POSSIBLE_PIECE_DEATH;
+            value = -POSSIBLE_PIECE_DEATH;
         }
-
+//        System.out.println("value: " + value);
         // Comportement par défaut quand rien de spécial ne se passe
-        return -NORMAL_MOVE;
+        return board.getMaxPlayer() == TileState.ROUGE ? value : -value;
     }
 
     /**

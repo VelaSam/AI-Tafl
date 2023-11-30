@@ -39,23 +39,10 @@ public class Tile {
         }
         if(this.state == TileState.ROUGE){
             return otherTile.state == TileState.ROI_NOIR || otherTile.state == TileState.NOIR;
-        } else {
-            throw new IllegalArgumentException("Cant find opposite color of : " + this.state);
         }
+        return false;
     }
-
-    public boolean isOppositeColorOfTileState(TileState otherTileState){
-
-        if(this.state == TileState.NOIR || this.state == TileState.ROI_NOIR){
-            return otherTileState == TileState.ROUGE;
-        }
-        if(this.state == TileState.ROUGE){
-            return otherTileState == TileState.ROI_NOIR || otherTileState == TileState.NOIR;
-        } else {
-            throw new IllegalArgumentException("Cant find opposite color of : " + this.state);
-        }
-    }
-
+    
     //risque de perte de vitesse si passe tiles par copie, correct si passe par reference
     public Tile getNextRight(Tile[][] tiles){
         //null si on sort du tableau

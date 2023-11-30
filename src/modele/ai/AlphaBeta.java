@@ -24,11 +24,11 @@ public class AlphaBeta {
         // get possible moves
         Map<String, List<String>> possibleMoves = board.getPossibleMoves(board.getMaxPlayer());
 
+        ArrayList<String> positionsToSend = new ArrayList<>();
+
         for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
             String coloredPieceBoardPosition = entry.getKey();
             List<String> possibleMovesFromColoredPiece = entry.getValue();
-
-            ArrayList<String> positionsToSend = new ArrayList<>();
 
             for (String position : possibleMovesFromColoredPiece) {
                 board.playMoveOnBoard(coloredPieceBoardPosition + " - " + position);
