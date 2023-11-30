@@ -1,9 +1,6 @@
 package modele.ai;
 
-import modele.helpers.Helpers;
 import modele.plan_de_jeu.Board;
-import modele.plan_de_jeu.Position;
-import modele.plan_de_jeu.Tile;
 import modele.plan_de_jeu.TileState;
 
 import java.util.ArrayList;
@@ -13,98 +10,120 @@ import java.util.Map;
 
 public class AlphaBeta {
     int numExploredNodes;
-    private TileState playerColor;
+    public static final int depth = 3;
 
     // Retourne la liste des coups possibles. Cette liste contient
     // plusieurs coups possibles si et seulement si plusieurs coups
     // ont le même score.
-    public Map<Tile, ArrayList<Position>> getNextMoveAB(Board board) {
-
-        playerColor = board.getMaxPlayer();
+    public Map<String, ArrayList<String>> getNextMoveAB(Board board) {
         numExploredNodes = 0;
-        Map<Tile, ArrayList<Position>> result = new HashMap<>();
 
-        // Nous commençons avec le joueur Max, car nous sommes le joueur Min pour le
-        // cpu.
+        Map<String, ArrayList<String>> result = new HashMap<>();
         double resultValue = Double.NEGATIVE_INFINITY;
 
-        Map<Tile, List<Position>> possibleMoves = board.getPossibleMoves();
+        // get possible moves
+        Map<String, List<String>> possibleMoves = board.getPossibleMoves(board.getMaxPlayer());
 
-        for (Map.Entry<Tile, List<Position>> entry : possibleMoves.entrySet()) {
-            Tile tile = entry.getKey();
-            List<Position> positions = entry.getValue();
-            ArrayList<Position> positionsToSend = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
+            String coloredPieceBoardPosition = entry.getKey();
+            List<String> possibleMovesFromColoredPiece = entry.getValue();
 
-            for (Position position : positions) {
-                Board boardWithNextMove = board.checkMove(tile, position, playerColor);
-                double value = minValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(), resultValue, Double.POSITIVE_INFINITY);
+            ArrayList<String> positionsToSend = new ArrayList<>();
+
+            for (String position : possibleMovesFromColoredPiece) {
+                board.playMoveOnBoard(coloredPieceBoardPosition + " - " + position);
+                // Board boardWithNextMove = board.checkMove(coloredPieceBoardPosition,
+                // position);
+                // double value = minValueAlphaBeta(boardWithNextMove,
+                // boardWithNextMove.getMinPlayer(), resultValue,
+                // Double.POSITIVE_INFINITY, depth);
+                double value = minValueAlphaBeta(board, board.getMinPlayer(), resultValue,
+                        Double.POSITIVE_INFINITY, depth);
+                board.undoLastMove();
                 if (value >= resultValue) {
                     if (value > resultValue) {
-                        result.clear();
+                        // result.clear();
+                        positionsToSend.clear();
                     }
                     positionsToSend.add(position); // ???????????
-                    System.out.println(positionsToSend);
+                    // System.out.println(positionsToSend);
                     resultValue = value;
+                    System.out.println("resultValue: " + resultValue);
                 }
             }
             if (!positionsToSend.isEmpty()) {
-                result.put(tile, positionsToSend);
+                result.put(coloredPieceBoardPosition, positionsToSend);
             }
         }
         return result;
     }
 
-    public double maxValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta) {
+    public double maxValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta, int depth) {
         numExploredNodes++;
-        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur);
-        // Game is done
-        if (positionActuelleEstFinale != -1)
+        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
+
+        if (depth == 0) {
             return positionActuelleEstFinale;
+        }
 
         // Game is not done
         double value = Double.NEGATIVE_INFINITY;
-        Map<Tile, List<Position>> possibleMoves = positionActuelle.getPossibleMoves();
+        Map<String, List<String>> possibleMoves = positionActuelle.getPossibleMoves(positionActuelle.getMaxPlayer());
 
-        for (Map.Entry<Tile, List<Position>> entry : possibleMoves.entrySet()) {
-            List<Position> positions = entry.getValue();
+        for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
+            List<String> positions = entry.getValue();
 
-            for (Position position : positions) {
-                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position, playerColor);
-                double score = minValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(),
-                        Math.max(alpha, value), beta);
+            for (String position : positions) {
+                positionActuelle.playMoveOnBoard(entry.getKey() + " - " + position);
+                // Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(),
+                // position);
+                // double score = minValueAlphaBeta(boardWithNextMove,
+                // boardWithNextMove.getMinPlayer(), Math.max(alpha, value), beta, depth - 1);
+                double score = minValueAlphaBeta(positionActuelle, positionActuelle.getMinPlayer(),
+                        Math.max(alpha, value), beta, depth - 1);
+
+                positionActuelle.undoLastMove();
                 value = Math.max(value, score);
                 alpha = Math.max(alpha, value);
                 if (alpha >= beta)
                     return value;
             }
         }
-
+        // System.out.println("maxValueAlphaBeta for depth " + depth + ": " + value);
         return value;
     }
 
-    public double minValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta) {
+    public double minValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta, int depth) {
         numExploredNodes++;
-        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur);
-        // Game is done
-        if (positionActuelleEstFinale != -1)
+        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
+
+        if (depth == 0) {
             return positionActuelleEstFinale;
+        }
 
         double value = Double.POSITIVE_INFINITY;
-        Map<Tile, List<Position>> possibleMoves = positionActuelle.getPossibleMoves();
+        Map<String, List<String>> possibleMoves = positionActuelle.getPossibleMoves(joueur);
 
-        for (Map.Entry<Tile, List<Position>> entry : possibleMoves.entrySet()) {
-            List<Position> positions = entry.getValue();
+        for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
+            List<String> positions = entry.getValue();
 
-            for (Position position : positions) {
-                Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(), position, playerColor);
-                double score = maxValueAlphaBeta(boardWithNextMove, boardWithNextMove.getMinPlayer(),
-                        Math.min(alpha, value), beta);
+            for (String position : positions) {
+                positionActuelle.playMoveOnBoard(entry.getKey() + " - " + position);
+                double score = maxValueAlphaBeta(positionActuelle, positionActuelle.getMaxPlayer(),
+                        Math.min(alpha, value), beta, depth - 1);
+                // Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(),
+                // position);
+                // double score = maxValueAlphaBeta(boardWithNextMove,
+                // boardWithNextMove.getMinPlayer(),
+                // Math.min(alpha, value), beta, depth - 1);
+                positionActuelle.undoLastMove();
                 value = Math.min(value, score);
                 beta = Math.min(beta, value);
                 if (beta <= alpha)
                     return value;
             }
         }
+        // System.out.println("minValueAlphaBeta for depth " + depth + ": " + value);
         return value;
     }
 

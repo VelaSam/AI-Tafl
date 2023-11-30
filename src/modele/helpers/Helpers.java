@@ -2,12 +2,12 @@ package modele.helpers;
 
 import java.util.HashMap;
 import java.util.Map;
+import modele.plan_de_jeu.TileState;
 
 public class Helpers {
     public static Map<Integer, String> letterFromNum;
     public static Map<String, Integer> numFromLetter;
-
-
+    public static Map<TileState, TileState> oppisiteColor;
     static {
         letterFromNum = new HashMap<>();
         letterFromNum.put(0, "A");
@@ -38,11 +38,33 @@ public class Helpers {
         numFromLetter.put("K", 10);
         numFromLetter.put("L", 11);
         numFromLetter.put("M", 12);
+
+        oppisiteColor = new HashMap<>();
+        oppisiteColor.put(TileState.NOIR, TileState.ROUGE);
+        oppisiteColor.put(TileState.ROUGE, TileState.NOIR);
     }
 
     public static String getLetterValue(Integer key) {
         return letterFromNum.get(key);
     }
 
-    public static int getNumberValue(String key){return numFromLetter.get(key);}
+    public static int getNumberValue(String key) {
+        return numFromLetter.get(key);
+    }
+
+    public static TileState getOppositeTileState(TileState ts){
+        return oppisiteColor.get(ts);
+    }
+
+    public static String getBoardPositionFromCoordinates(int x, int y){
+        return getLetterValue(x) + (y + 1);
+    }
+
+    public static int getXCoordinateFromBoardPosition(String boardPosition){
+        return getNumberValue(String.valueOf(boardPosition.charAt(0)));
+    }
+
+    public static int getYCoordinateFromBoardPosition(String boardPosition){
+        return Integer.parseInt(boardPosition.substring(1)) - 1;
+    }
 }

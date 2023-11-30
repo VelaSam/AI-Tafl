@@ -11,8 +11,15 @@ public class Position {
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
-        this.boardPosition = Helpers.getLetterValue(x) + (this.y + 1);
-//        System.out.println("THIS IS THE POSITION:" + "I: " + x + ", J: " + y + " POSITION: " + this.boardPosition);
+        this.boardPosition = Helpers.getBoardPositionFromCoordinates(this.x, this.y);
+        // System.out.println("THIS IS THE POSITION:" + "I: " + x + ", J: " + y + " POSITION: " +
+        // this.boardPosition);
+    }
+
+    public Position(String boardPosition) {
+        this.boardPosition = boardPosition;
+        this.x = Helpers.getNumberValue(String.valueOf(boardPosition.charAt(0)));
+        this.y = Integer.parseInt(boardPosition.substring(1)) - 1;
     }
 
     public int getX() {
@@ -27,7 +34,7 @@ public class Position {
         return boardPosition;
     }
 
-    public String toString(){
+    public String toString() {
         return boardPosition;
     }
 }
