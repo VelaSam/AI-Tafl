@@ -17,7 +17,7 @@ public class Board {
     private TileState maxPlayer;
     private TileState minPlayer;
 
-    private Stack<BeforeMoveState> movesStack = new Stack<>();
+    public Stack<BeforeMoveState> movesStack = new Stack<>();
 
     private int blackPieces;
     private int redPieces;
@@ -146,7 +146,9 @@ public class Board {
                 availablePositions.add(Helpers.getBoardPositionFromCoordinates(tile.getX(), j));
             }
 
-            positions.put(currentTileBoardPosition, availablePositions);
+            if(availablePositions.size() != 0){
+                positions.put(currentTileBoardPosition, availablePositions);
+            }
         }
     }
 
@@ -212,6 +214,7 @@ public class Board {
         beginningTile.setState(TileState.EMPTY);
         destinationTile.setState(moverState);
         checkForPieceKill(destinationTile);
+
     }
 
     /**
@@ -438,8 +441,6 @@ public class Board {
         for (int i = movesStack.indexOf(secondLastMove); i < movesStack.size(); i++) {
             if (movesStack.get(i).isKill()) {
                 killCount++;
-            } else {
-                break;
             }
         }
         return killCount;

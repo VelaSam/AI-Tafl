@@ -9,7 +9,7 @@ public class EvaluationFunctions {
     private static final int GAME_OVER = 1000000;
     private static final int GAME_OVER_DRAW = 0;
     private static final int KILL = 5000;
-    private static final int POSSIBLE_KING_DEATH = 25000;
+    private static final int POSSIBLE_KING_DEATH = 1000;
     private static final int POSSIBLE_PIECE_DEATH = 10000;
     private static final int NORMAL_MOVE = 100;
     private static final int DEPTH_CORRECTION = 1000;
@@ -91,19 +91,19 @@ public class EvaluationFunctions {
 
         // Case 2
         if (redPiecesAroundKingCount > 0) {
-            value = (POSSIBLE_KING_DEATH) * redPiecesAroundKingCount;
+            value += (POSSIBLE_KING_DEATH) * redPiecesAroundKingCount;
         }
 
         // Case 3
         int lastMoveKillCount = board.getLastMoveKillCount();
         if (lastMoveKillCount > 0) {
-            value = (KILL) * board.getLastMoveKillCount();
+            value += (KILL) * board.getLastMoveKillCount();
         }
 
         // Case 1
         Tile lastMovedTile = board.getLastMoveUpdatedTile();
         if (lastMovedTile != null && isTileInDanger(lastMovedTile, board)) {
-            value = -POSSIBLE_PIECE_DEATH;
+            value -= POSSIBLE_PIECE_DEATH;
         }
 //        System.out.println("value: " + value);
         // Comportement par défaut quand rien de spécial ne se passe
@@ -157,19 +157,19 @@ public class EvaluationFunctions {
 
         // Case 2
         if (redPiecesAroundKingCount > 0) {
-            value = (POSSIBLE_KING_DEATH) * redPiecesAroundKingCount;
+            value += (POSSIBLE_KING_DEATH) * redPiecesAroundKingCount;
         }
 
         // Case 3
         int lastMoveKillCount = board.getLastMoveKillCount();
         if (lastMoveKillCount > 0) {
-            value = (KILL) * board.getLastMoveKillCount();
+            value += (KILL) * board.getLastMoveKillCount();
         }
 
         // Case 1
         Tile lastMovedTile = board.getLastMoveUpdatedTile();
         if (lastMovedTile != null && isTileInDanger(lastMovedTile, board)) {
-            value = -POSSIBLE_PIECE_DEATH;
+            value -= POSSIBLE_PIECE_DEATH;
         }
 //        System.out.println("value: " + value);
         // Comportement par défaut quand rien de spécial ne se passe
