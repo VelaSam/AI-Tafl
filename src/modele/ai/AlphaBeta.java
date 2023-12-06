@@ -24,35 +24,29 @@ public class AlphaBeta {
         // get possible moves
         Map<String, List<String>> possibleMoves = board.getPossibleMoves(board.getMaxPlayer());
 
-        ArrayList<String> positionsToSend = new ArrayList<>();
-
+        // Pour chaque piece de la couleur concernée
         for (Map.Entry<String, List<String>> entry : possibleMoves.entrySet()) {
             String coloredPieceBoardPosition = entry.getKey();
             List<String> possibleMovesFromColoredPiece = entry.getValue();
+            ArrayList<String> bestMovesForCurrentPiece = new ArrayList<>();
 
+            // Pour chaque coup possible de la piece courante
             for (String position : possibleMovesFromColoredPiece) {
                 board.playMoveOnBoard(coloredPieceBoardPosition + " - " + position);
-                // Board boardWithNextMove = board.checkMove(coloredPieceBoardPosition,
-                // position);
-                // double value = minValueAlphaBeta(boardWithNextMove,
-                // boardWithNextMove.getMinPlayer(), resultValue,
-                // Double.POSITIVE_INFINITY, depth);
                 double value = minValueAlphaBeta(board, board.getMinPlayer(), resultValue,
                         Double.POSITIVE_INFINITY, depth);
                 board.undoLastMove();
                 if (value >= resultValue) {
                     if (value > resultValue) {
-                        // result.clear();
-                        positionsToSend.clear();
+                        bestMovesForCurrentPiece.clear();
                     }
-                    positionsToSend.add(position); // ???????????
-                    // System.out.println(positionsToSend);
+                    bestMovesForCurrentPiece.add(position);
                     resultValue = value;
-                    System.out.println("resultValue: " + resultValue);
                 }
             }
-            if (!positionsToSend.isEmpty()) {
-                result.put(coloredPieceBoardPosition, positionsToSend);
+
+            if (!bestMovesForCurrentPiece.isEmpty()) {
+                result.put(coloredPieceBoardPosition, bestMovesForCurrentPiece);
             }
         }
         return result;
@@ -75,10 +69,6 @@ public class AlphaBeta {
 
             for (String position : positions) {
                 positionActuelle.playMoveOnBoard(entry.getKey() + " - " + position);
-                // Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(),
-                // position);
-                // double score = minValueAlphaBeta(boardWithNextMove,
-                // boardWithNextMove.getMinPlayer(), Math.max(alpha, value), beta, depth - 1);
                 double score = minValueAlphaBeta(positionActuelle, positionActuelle.getMinPlayer(),
                         Math.max(alpha, value), beta, depth - 1);
 
@@ -89,7 +79,6 @@ public class AlphaBeta {
                     return value;
             }
         }
-        // System.out.println("maxValueAlphaBeta for depth " + depth + ": " + value);
         return value;
     }
 
@@ -111,11 +100,6 @@ public class AlphaBeta {
                 positionActuelle.playMoveOnBoard(entry.getKey() + " - " + position);
                 double score = maxValueAlphaBeta(positionActuelle, positionActuelle.getMaxPlayer(),
                         Math.min(alpha, value), beta, depth - 1);
-                // Board boardWithNextMove = positionActuelle.checkMove(entry.getKey(),
-                // position);
-                // double score = maxValueAlphaBeta(boardWithNextMove,
-                // boardWithNextMove.getMinPlayer(),
-                // Math.min(alpha, value), beta, depth - 1);
                 positionActuelle.undoLastMove();
                 value = Math.min(value, score);
                 beta = Math.min(beta, value);
@@ -123,7 +107,6 @@ public class AlphaBeta {
                     return value;
             }
         }
-        // System.out.println("minValueAlphaBeta for depth " + depth + ": " + value);
         return value;
     }
 
