@@ -3,20 +3,28 @@ package modele.ai;
 import modele.plan_de_jeu.Board;
 import modele.plan_de_jeu.TileState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AlphaBeta {
     int numExploredNodes;
-    public static final int depth = 3;
+    public static final int depth = 10;
+    private Timer timer;
+    private boolean timeIsUp;
 
 
     // Retourne la liste des coups possibles. Cette liste contient
     // plusieurs coups possibles si et seulement si plusieurs coups
     // ont le même score.
     public Map<String, ArrayList<String>> getNextMoveAB(Board board) {
+        timer = new Timer();
+        timeIsUp = false;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timeIsUp = true;
+            }
+        }, 4999);
+
         numExploredNodes = 0;
 
         Map<String, ArrayList<String>> result = new HashMap<>();
@@ -57,6 +65,7 @@ public class AlphaBeta {
             }
 
         }
+        timer.cancel();
         return result;
 
     }
@@ -64,8 +73,9 @@ public class AlphaBeta {
     public double maxValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta, int depth) {
         numExploredNodes++;
 
-        if (depth == 0) {
+        if (depth == 0 || timeIsUp) {
 
+            System.out.println("THE DEPTH IS: " + depth);
             int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
             // System.out.println(positionActuelle);
 
