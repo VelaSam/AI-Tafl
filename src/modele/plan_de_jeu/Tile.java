@@ -39,10 +39,12 @@ public class Tile {
         }
         if(this.state == TileState.ROUGE){
             return otherTile.state == TileState.ROI_NOIR || otherTile.state == TileState.NOIR;
+        } else {
+            return false;
         }
         return false;
     }
-    
+
     //risque de perte de vitesse si passe tiles par copie, correct si passe par reference
     public Tile getNextRight(Tile[][] tiles){
         //null si on sort du tableau
