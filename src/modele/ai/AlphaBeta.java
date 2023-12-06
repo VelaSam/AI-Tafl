@@ -30,6 +30,8 @@ public class AlphaBeta {
             List<String> possibleMovesFromColoredPiece = entry.getValue();
             ArrayList<String> bestMovesForCurrentPiece = new ArrayList<>();
 
+            double innerResultValue = Double.NEGATIVE_INFINITY;
+
             // Pour chaque coup possible de la piece courante
             for (String position : possibleMovesFromColoredPiece) {
                 board.playMoveOnBoard(coloredPieceBoardPosition + " - " + position);
@@ -42,21 +44,29 @@ public class AlphaBeta {
                     }
                     bestMovesForCurrentPiece.add(position);
                     resultValue = value;
+                    innerResultValue = value;
                 }
             }
 
-            if (!bestMovesForCurrentPiece.isEmpty()) {
-                result.put(coloredPieceBoardPosition, bestMovesForCurrentPiece);
+            if (innerResultValue >= resultValue) {
+                if (innerResultValue > resultValue) {
+                    result.clear();
+                }
+                if (!bestMovesForCurrentPiece.isEmpty()) {
+                    result.put(coloredPieceBoardPosition, bestMovesForCurrentPiece);
+                }
             }
+
         }
         return result;
     }
 
     public double maxValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta, int depth) {
         numExploredNodes++;
-        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
 
         if (depth == 0) {
+            int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
+            // System.out.println(positionActuelle);
             return positionActuelleEstFinale;
         }
 
@@ -84,9 +94,10 @@ public class AlphaBeta {
 
     public double minValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta, int depth) {
         numExploredNodes++;
-        int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
 
         if (depth == 0) {
+            int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
+            // System.out.println(positionActuelle);
             return positionActuelleEstFinale;
         }
 

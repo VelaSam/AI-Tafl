@@ -402,21 +402,29 @@ public class Board {
         return null;
     }
 
-    public BeforeMoveState getSecondLastMove() {
+    public BeforeMoveState getLastMove() {
         for (int i = movesStack.size() - 1; i >= 0; i--) {
             BeforeMoveState currentMove = movesStack.get(i);
             if (currentMove.isKill()) {
                 continue;
             }
-            for (int j = i - 1; j >= 0; j--) {
-                currentMove = movesStack.get(j);
-                if (currentMove.isKill()) {
-                    continue;
-                }
-                return currentMove;
-            }
+            return currentMove;
         }
         return null;
+        // for (int i = movesStack.size() - 1; i >= 0; i--) {
+        // BeforeMoveState currentMove = movesStack.get(i);
+        // if (currentMove.isKill()) {
+        // continue;
+        // }
+        // for (int j = i - 1; j >= 0; j--) {
+        // currentMove = movesStack.get(j);
+        // if (currentMove.isKill()) {
+        // continue;
+        // }
+        // return currentMove;
+        // }
+        // }
+        // return null;
     }
 
     /**
@@ -425,7 +433,7 @@ public class Board {
      * @return Le nombre de pièces tuées lors du dernier coup.
      */
     public int getLastMoveKillCount() {
-        BeforeMoveState secondLastMove = getSecondLastMove();
+        BeforeMoveState secondLastMove = getLastMove();
         int killCount = 0;
         for (int i = movesStack.indexOf(secondLastMove); i < movesStack.size(); i++) {
             if (movesStack.get(i).isKill()) {
@@ -443,7 +451,7 @@ public class Board {
      * @return La tuile où s'est déplacée la pièce lors du dernier coup.
      */
     public Tile getLastMoveUpdatedTile() {
-        Tile lastTile = findTileWithBoardPosition(getSecondLastMove().getToBoardPosition());
+        Tile lastTile = findTileWithBoardPosition(getLastMove().getToBoardPosition());
         // for (int i = movesStack.size() - 1; i >= movesStack.size() - 4 && i >= 0;
         // i--) {
         // if (movesStack.get(i).isKill()) {

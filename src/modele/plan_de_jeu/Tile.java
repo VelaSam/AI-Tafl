@@ -15,7 +15,7 @@ public class Tile {
         isMarkedX = isTileMarkedX(position);
     }
 
-    public Tile(Position position, TileState tileState){
+    public Tile(Position position, TileState tileState) {
         this.position = position;
         this.state = tileState;
 
@@ -29,60 +29,61 @@ public class Tile {
             }
             return position.getY() == WIDTH - 1;
         } else
-            return position.getX() == WIDTH/2 && position.getY() == WIDTH/2;
+            return position.getX() == WIDTH / 2 && position.getY() == WIDTH / 2;
     }
 
-    public boolean isOppositeColorOf(Tile otherTile){
+    public boolean isOppositeColorOf(Tile otherTile) {
 
-        if(this.state == TileState.NOIR || this.state == TileState.ROI_NOIR){
+        if (this.state == TileState.NOIR || this.state == TileState.ROI_NOIR) {
             return otherTile.state == TileState.ROUGE;
         }
-        if(this.state == TileState.ROUGE){
+        if (this.state == TileState.ROUGE) {
             return otherTile.state == TileState.ROI_NOIR || otherTile.state == TileState.NOIR;
         } else {
             return false;
         }
-        return false;
     }
 
-    //risque de perte de vitesse si passe tiles par copie, correct si passe par reference
-    public Tile getNextRight(Tile[][] tiles){
-        //null si on sort du tableau
-        //is > or >= ????
-        if(this.getX() + 1 >= WIDTH){
+    // risque de perte de vitesse si passe tiles par copie, correct si passe par
+    // reference
+    public Tile getNextRight(Tile[][] tiles) {
+        // null si on sort du tableau
+        // is > or >= ????
+        if (this.getX() + 1 >= WIDTH) {
             return null;
         }
         return tiles[this.getX() + 1][this.getY()];
     }
 
-    public Tile getNextLeft(Tile[][] tiles){
-        //retournera null si on sort du tableau
-        if(this.getX() - 1 < 0){
+    public Tile getNextLeft(Tile[][] tiles) {
+        // retournera null si on sort du tableau
+        if (this.getX() - 1 < 0) {
             return null;
         }
-        return tiles[this.getX()-1][this.getY()];
+        return tiles[this.getX() - 1][this.getY()];
     }
-    public Tile getNextUp(Tile[][] tiles){
-        //retournera null si on sort du tableau
-        if(this.getY() + 1 >= WIDTH){
+
+    public Tile getNextUp(Tile[][] tiles) {
+        // retournera null si on sort du tableau
+        if (this.getY() + 1 >= WIDTH) {
             return null;
         }
         return tiles[this.getX()][this.getY() + 1];
     }
-    public Tile getNextDown(Tile[][] tiles){
-        //retournera null si on sort du tableau
-        if(this.getY() - 1 < 0){
+
+    public Tile getNextDown(Tile[][] tiles) {
+        // retournera null si on sort du tableau
+        if (this.getY() - 1 < 0) {
             return null;
         }
         return tiles[this.getX()][this.getY() - 1];
     }
 
-
-    public int getX(){
+    public int getX() {
         return this.position.getX();
     }
 
-    public int getY(){
+    public int getY() {
         return this.position.getY();
     }
 
@@ -106,22 +107,20 @@ public class Tile {
         this.position = position;
     }
 
-    public String toString(){
+    public String toString() {
 
-        if(this.state == TileState.ROI_NOIR){
+        if (this.state == TileState.ROI_NOIR) {
             return "ROI";
-        }else{
+        } else {
             return this.position.toString();
         }
 
     }
 
-
-    public String singleCharacterStateString(){
-        if(this.isMarkedX && this.state == TileState.EMPTY){
+    public String singleCharacterStateString() {
+        if (this.isMarkedX && this.state == TileState.EMPTY) {
             return "X";
-        }
-        else
+        } else
             return this.state.toString();
     }
 
