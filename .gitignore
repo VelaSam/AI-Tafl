@@ -176,14 +176,4 @@ tags
 
 *.brd
 
-Serveur/libstdc\+\+-6.dll
-
-Serveur/libwinpthread-1.dll
-
-Serveur/Qt6Core.dll
-
-Serveur/Qt6Gui.dll
-
-Serveur/Qt6Network.dll
-
-Serveur/Qt6Widgets.dll
+Serveur/
