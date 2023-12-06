@@ -6,13 +6,13 @@ import modele.plan_de_jeu.TileState;
 
 public class EvaluationFunctions {
 
-    private static int GAME_OVER = 1000000;
-    private static int GAME_OVER_DRAW = 0;
-    private static int KILL = 5000;
-    private static int POSSIBLE_KING_DEATH = 25000;
-    private static int POSSIBLE_PIECE_DEATH = 10000;
-    private static int NORMAL_MOVE = 100;
-    private static int DEPTH_CORRECTION = 1000;
+    private static final int GAME_OVER = 1000000;
+    private static final int GAME_OVER_DRAW = 0;
+    private static final int KILL = 5000;
+    private static final int POSSIBLE_KING_DEATH = 25000;
+    private static final int POSSIBLE_PIECE_DEATH = 10000;
+    private static final int NORMAL_MOVE = 100;
+    private static final int DEPTH_CORRECTION = 1000;
 
     /**
      * Évalue la situation du joueur passé en paramètre
@@ -33,30 +33,6 @@ public class EvaluationFunctions {
         }
 
         return 0;
-
-        // TileState opposite = Helpers.getOppositeTileState(color);
-
-        // if (kingInCorner(board)) {
-        // return color == TileState.ROUGE ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-        // }
-
-        // int colorNumberPieces = board.getPlayerPiecesCounter(color);
-        // int oppositeNumberPieces = board.getPlayerPiecesCounter(opposite);
-
-        // // System.out.println(colorNumberPieces + " AND " + oppositeNumberPieces);
-
-        // if (color == TileState.NOIR) {
-        // colorNumberPieces *= 24;
-        // oppositeNumberPieces *= 13;
-
-        // } else {
-        // colorNumberPieces *= 13;
-        // oppositeNumberPieces *= 24;
-        // }
-
-        // // System.out.println(colorNumberPieces + " AND " + oppositeNumberPieces);
-
-        // return colorNumberPieces - oppositeNumberPieces;
     }
 
     /**
