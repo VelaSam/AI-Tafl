@@ -30,7 +30,7 @@ public class AlphaBeta {
             List<String> possibleMovesFromColoredPiece = entry.getValue();
             ArrayList<String> bestMovesForCurrentPiece = new ArrayList<>();
 
-            double innerResultValue = Double.NEGATIVE_INFINITY;
+            double beforeValue = resultValue;
 
             // Pour chaque coup possible de la piece courante
             for (String position : possibleMovesFromColoredPiece) {
@@ -44,21 +44,18 @@ public class AlphaBeta {
                     }
                     bestMovesForCurrentPiece.add(position);
                     resultValue = value;
-                    innerResultValue = value;
                 }
             }
 
-            if (innerResultValue >= resultValue) {
-                if (innerResultValue > resultValue) {
-                    result.clear();
-                }
-                if (!bestMovesForCurrentPiece.isEmpty()) {
-                    result.put(coloredPieceBoardPosition, bestMovesForCurrentPiece);
-                }
+            if (resultValue > beforeValue) {
+                result.clear();
             }
+
+            result.put(coloredPieceBoardPosition, bestMovesForCurrentPiece);
 
         }
         return result;
+
     }
 
     public double maxValueAlphaBeta(Board positionActuelle, TileState joueur, double alpha, double beta, int depth) {
