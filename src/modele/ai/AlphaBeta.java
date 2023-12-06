@@ -12,6 +12,7 @@ public class AlphaBeta {
     int numExploredNodes;
     public static final int depth = 3;
 
+
     // Retourne la liste des coups possibles. Cette liste contient
     // plusieurs coups possibles si et seulement si plusieurs coups
     // ont le même score.
@@ -51,7 +52,9 @@ public class AlphaBeta {
                 result.clear();
             }
 
-            result.put(coloredPieceBoardPosition, bestMovesForCurrentPiece);
+            if(!bestMovesForCurrentPiece.isEmpty()){
+                result.put(coloredPieceBoardPosition, bestMovesForCurrentPiece);
+            }
 
         }
         return result;
@@ -62,8 +65,10 @@ public class AlphaBeta {
         numExploredNodes++;
 
         if (depth == 0) {
+
             int positionActuelleEstFinale = EvaluationFunctions.evaluate(positionActuelle, joueur, depth);
             // System.out.println(positionActuelle);
+
             return positionActuelleEstFinale;
         }
 
