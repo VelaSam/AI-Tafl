@@ -19,7 +19,7 @@ class Client {
         AlphaBeta alphaBeta = new AlphaBeta();
 
         try {
-            MyClient = new Socket("localhost", 8888);
+            MyClient = new Socket(args[0], 8888);
 
             input    = new BufferedInputStream(MyClient.getInputStream());
             output   = new BufferedOutputStream(MyClient.getOutputStream());

@@ -7,7 +7,7 @@ import java.util.*;
 
 public class AlphaBeta {
     int numExploredNodes;
-    public static final int depth = 10;
+    public static final int depth = 3;
     private Timer timer;
     private boolean timeIsUp;
 
